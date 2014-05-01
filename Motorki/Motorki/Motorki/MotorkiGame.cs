@@ -11,6 +11,8 @@ namespace Motorki
         SpriteBatch spriteBatch;
         BlendState LayerBlendState;
 
+        MouseCursor mCursor;
+
         UIParent UI;
         RenderTarget2D UITarget;
 
@@ -19,7 +21,7 @@ namespace Motorki
             ieGenerator = new InputEvents(this, 500, 50, 100, 50);
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            mCursor = new MouseCursor(this);
         }
 
         protected override void Initialize()
@@ -35,6 +37,9 @@ namespace Motorki
             LayerBlendState.ColorSourceBlend = LayerBlendState.AlphaSourceBlend = Blend.SourceAlpha;
             LayerBlendState.ColorBlendFunction = LayerBlendState.AlphaBlendFunction = BlendFunction.Add;
             LayerBlendState.ColorDestinationBlend = LayerBlendState.AlphaDestinationBlend = Blend.InverseSourceAlpha;
+
+            mCursor.LoadAndInitialize();
+            mCursor.Visible = true;
 
             //create render targets
             UITarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
@@ -71,6 +76,7 @@ namespace Motorki
             spriteBatch.Begin(SpriteSortMode.Immediate, LayerBlendState);
             //spriteBatch.Draw(gameTarget, new Rectangle(0, 0, gameTarget.Width, gameTarget.Height), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
             spriteBatch.Draw(UITarget, Vector2.Zero, Color.White);
+            mCursor.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

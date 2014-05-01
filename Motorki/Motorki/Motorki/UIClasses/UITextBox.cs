@@ -42,18 +42,16 @@ namespace Motorki.UIClasses
             }
         }
 
-        protected Texture2D Textures;
-        protected SpriteFont Font;
-        protected Rectangle NormalTexture = new Rectangle(0, 0, 37, 30);
-        protected Rectangle HiliteTexture = new Rectangle(0, 31, 37, 30);
-        protected Rectangle DisabledTexture = new Rectangle(0, 62, 37, 30);
-        protected Rectangle[] Corners = new Rectangle[] { new Rectangle(0, 0, 5, 5), new Rectangle(32, 0, 5, 5),
+        public Rectangle NormalTexture = new Rectangle(0, 0, 37, 30);
+        public Rectangle HiliteTexture = new Rectangle(0, 31, 37, 30);
+        public Rectangle DisabledTexture = new Rectangle(0, 62, 37, 30);
+        public Rectangle[] Corners = new Rectangle[] { new Rectangle(0, 0, 5, 5), new Rectangle(32, 0, 5, 5),
                                                           new Rectangle(0, 25, 5, 5), new Rectangle(32, 25, 5, 5) };
-        protected Rectangle[] Edges = new Rectangle[] { new Rectangle(5, 0, 27, 5),
+        public Rectangle[] Edges = new Rectangle[] { new Rectangle(5, 0, 27, 5),
                                                         new Rectangle(0, 5, 5, 20), new Rectangle(32, 5, 5, 20),
                                                         new Rectangle(5, 25, 27, 5) };
-        protected Rectangle Middle = new Rectangle(5, 5, 27, 20);
-        protected Rectangle Cursor = new Rectangle(37, 30, 1, 1);
+        public Rectangle Middle = new Rectangle(5, 5, 27, 20);
+        public Rectangle Cursor = new Rectangle(37, 30, 1, 1);
 
         public UITextBox(Game game)
             : base(game)

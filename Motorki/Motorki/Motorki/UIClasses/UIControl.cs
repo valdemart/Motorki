@@ -47,6 +47,9 @@ namespace Motorki.UIClasses
             }
         }
 
+        public Texture2D Textures;
+        public SpriteFont Font;
+
         protected Game game;
 
         public UIControl(Game game)

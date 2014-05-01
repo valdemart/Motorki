@@ -30,8 +30,6 @@ namespace Motorki.UIClasses
             }
         }
 
-        protected SpriteFont Font;
-
         public UILabel(Game game)
             : base(game)
         {

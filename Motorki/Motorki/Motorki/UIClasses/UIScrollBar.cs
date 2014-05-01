@@ -121,7 +121,7 @@ namespace Motorki.UIClasses
                 }
 
                 btnMinus.PositionAndSize = new Rectangle(value.X, value.Y, btnMinus.NormalTexture.Width, btnMinus.NormalTexture.Height);
-                btnPlus.PositionAndSize = new Rectangle(value.Right - btnPlus.NormalTexture.Width, value.Bottom - btnPlus.NormalTexture.Height, btnPlus.NormalTexture.Width, btnPlus.NormalTexture.Height);
+                btnPlus.PositionAndSize = new Rectangle((IsVertical ? value.X : value.Right - btnPlus.NormalTexture.Width), (IsVertical ? value.Bottom - btnPlus.NormalTexture.Height : value.Y), btnPlus.NormalTexture.Width, btnPlus.NormalTexture.Height);
 
                 base.PositionAndSize = value;
             }
@@ -138,16 +138,15 @@ namespace Motorki.UIClasses
             }
         }
 
-        protected Texture2D Textures;
-        protected Rectangle NormalBackground = new Rectangle(88, 94, 21, 21);
-        protected Rectangle HiliteBackground = new Rectangle(88, 116, 21, 21);
-        protected Rectangle DisabledBackground = new Rectangle(88, 138, 21, 21);
-        protected Rectangle[] Corners = new Rectangle[] { new Rectangle(0, 0, 4, 4), new Rectangle(17, 0, 4, 4),
+        public Rectangle NormalBackground = new Rectangle(88, 94, 21, 21);
+        public Rectangle HiliteBackground = new Rectangle(88, 116, 21, 21);
+        public Rectangle DisabledBackground = new Rectangle(88, 138, 21, 21);
+        public Rectangle[] Corners = new Rectangle[] { new Rectangle(0, 0, 4, 4), new Rectangle(17, 0, 4, 4),
                                                           new Rectangle(0, 17, 4, 4), new Rectangle(17, 17, 4, 4) };
-        protected Rectangle[] Edges = new Rectangle[] { new Rectangle(4, 0, 13, 4),
+        public Rectangle[] Edges = new Rectangle[] { new Rectangle(4, 0, 13, 4),
                                                         new Rectangle(0, 4, 4, 13), new Rectangle(17, 4, 4, 13),
                                                         new Rectangle(4, 17, 13, 4) };
-        protected Rectangle Middle = new Rectangle(4, 4, 13, 13);
+        public Rectangle Middle = new Rectangle(4, 4, 13, 13);
 
         public event UIScrollBar_ValueChanged ValueChanged;
 
@@ -184,15 +183,10 @@ namespace Motorki.UIClasses
                 Hilited = false;
 
                 btnMinus.InputEvents_MouseMovedLeftChangedOrLeftRepeated(md);
-                if (btnMinus.Handled)
-                    return;
-
                 btnPlus.InputEvents_MouseMovedLeftChangedOrLeftRepeated(md);
-                if (btnPlus.Handled)
-                    return;
-
                 thumb.InputEvents_MouseMovedLeftChangedOrRepeat(md);
-                if (thumb.Handled)
+
+                if (btnMinus.Handled || btnPlus.Handled || thumb.Handled)
                     return;
 
                 bool mouseOver = ((md.X >= PositionAndSize.Left) && (md.X <= PositionAndSize.Right) && (md.Y >= PositionAndSize.Top) && (md.Y <= PositionAndSize.Bottom));
@@ -316,7 +310,6 @@ namespace Motorki.UIClasses
             private UIScrollBar Parent;
             public bool Handled { get; private set; }
 
-            public Texture2D Textures;
             public Rectangle NormalTexture = new Rectangle(0, 0, 21, 21);
             public Rectangle NormalPressedTexture = new Rectangle(0, 0, 21, 21);
             public Rectangle HiliteTexture = new Rectangle(0, 0, 21, 21);
@@ -401,7 +394,6 @@ namespace Motorki.UIClasses
             private UIScrollBar Parent;
             public bool Handled { get; private set; }
 
-            public Texture2D Textures;
             public Rectangle NormalTexture = new Rectangle(0, 116, 21, 21);
             public Rectangle NormalPressedTexture = new Rectangle(44, 116, 21, 21);
             public Rectangle HiliteTexture = new Rectangle(22, 116, 21, 21);
