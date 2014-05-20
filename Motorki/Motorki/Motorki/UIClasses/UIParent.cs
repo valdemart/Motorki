@@ -113,7 +113,11 @@ namespace Motorki.UIClasses
                     if (dr.Viewport != null)
                     {
                         sb.End();
-                        sb.GraphicsDevice.Viewport = new Viewport((Rectangle)dr.Viewport);
+                        int l = (int)MathHelper.Clamp(((Rectangle)dr.Viewport).Left, 0, sb.GraphicsDevice.PresentationParameters.BackBufferWidth - 1);
+                        int r = (int)MathHelper.Clamp(((Rectangle)dr.Viewport).Right, 0, sb.GraphicsDevice.PresentationParameters.BackBufferWidth - 1);
+                        int t = (int)MathHelper.Clamp(((Rectangle)dr.Viewport).Top, 0, sb.GraphicsDevice.PresentationParameters.BackBufferHeight - 1);
+                        int b = (int)MathHelper.Clamp(((Rectangle)dr.Viewport).Bottom, 0, sb.GraphicsDevice.PresentationParameters.BackBufferHeight - 1);
+                        sb.GraphicsDevice.Viewport = new Viewport(new Rectangle(l, t, r - l + 1, b - t + 1));
                         sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
                         vpChanged = true;
                     }

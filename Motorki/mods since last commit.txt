@@ -1,0 +1,25 @@
+- Motorek class
+- PlayerMotor/BotMotor classes
+- PlayerMotor steering relative/absolute (plus testing UI)
+- some memory saving fixes
+- game settings support: class, xml import/export
+- classes for game menus (declared, not defined)
+
+todo:
+? add animations into UIClasses controls
++ track class (decide between circular elements or bar)
++ networking
++ audio support
+* finish implementing game menus and screens
+	+ need: decide map format (to implement GameSettings::SelectMap)
+	+ need: map list
+	+ partially need: networking (for JoinGame support - NewGame can work in offline if it needs)
+	+ need: menu logos
+	+ need: (project) <options>:C (common options)
+	+ need: UIProgress
+	+ need: menu flow processor
++ UI: UIProgress
++ game: collision detection
++ game: map format
++ game: game types
++ game: UI

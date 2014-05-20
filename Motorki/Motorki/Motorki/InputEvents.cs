@@ -47,7 +47,7 @@ namespace Motorki
 
     public class InputEvents : Microsoft.Xna.Framework.GameComponent
     {
-        long[] keypress_times;
+        static long[] keypress_times;
         public static long key_repeat_edge, key_repeat, mousekey_repeat_edge, mousekey_repeat;
         //last mouse states
         int mouse_x, mouse_y;
@@ -71,6 +71,16 @@ namespace Motorki
             mbtnLeft = 0;
             mbtnRight = 0;
             mbtnCenter = 0;
+        }
+
+        public static bool IsKeyPressed(Keys key)
+        {
+            return (keypress_times[(int)key] > 0);
+        }
+
+        public static long GetKeyHoldTimer(Keys key)
+        {
+            return keypress_times[(int)key];
         }
 
         public void CheckForEvents(GameTime gameTime)

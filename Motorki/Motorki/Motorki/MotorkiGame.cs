@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Motorki.UIClasses;
+using System;
 
 namespace Motorki
 {
@@ -10,23 +12,30 @@ namespace Motorki
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         BlendState LayerBlendState;
-
+        
         MouseCursor mCursor;
-
         UIParent UI;
         RenderTarget2D UITarget;
+
+        GameSettings gameSettings;
+
+        Motorek motorek;
+        Motorek bot;
 
         public MotorkiGame()
         {
             ieGenerator = new InputEvents(this, 500, 50, 100, 50);
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
             mCursor = new MouseCursor(this);
+            gameSettings = new GameSettings();
+            gameSettings.LoadFromFile("settings.xml");
         }
 
-        protected override void Initialize()
+        protected override void OnExiting(object sender, EventArgs args)
         {
-            base.Initialize();
+            gameSettings.SaveToFile("settings.xml");
         }
 
         protected override void LoadContent()
@@ -46,12 +55,14 @@ namespace Motorki
 
             //create UI
             UI = new UIParent(this);
-            CreateTestUI();
+            //CreateTestUI();
+            CreateSteeringTestUI();
             UI.LoadAndInitialize();
-        }
 
-        protected override void UnloadContent()
-        {
+            motorek = new PlayerMotor(this, new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), 90, new Color(255, 255, 32), new Color(255, 255, 0), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+            bot = new BotMotor(this, new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), 90, new Color(255, 32, 32), new Color(255, 255, 0), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+            motorek.LoadAndInitialize();
+            bot.LoadAndInitialize();
         }
 
         protected override void Update(GameTime gameTime)
@@ -59,6 +70,9 @@ namespace Motorki
             base.Update(gameTime);
             ieGenerator.CheckForEvents(gameTime);
             UI.Update(gameTime);
+
+            motorek.Update(gameTime);
+            bot.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -69,12 +83,16 @@ namespace Motorki
             UI.Draw(ref spriteBatch, gameTime);
 
             //render game
+            motorek.Draw(gameTime);
+            bot.Draw(gameTime);
 
             //gather screen layers
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteSortMode.Immediate, LayerBlendState);
             //spriteBatch.Draw(gameTarget, new Rectangle(0, 0, gameTarget.Width, gameTarget.Height), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
+            motorek.DrawToSB(ref spriteBatch, 0, 0);
+            bot.DrawToSB(ref spriteBatch, 0, 0);
             spriteBatch.Draw(UITarget, Vector2.Zero, Color.White);
             mCursor.Draw(spriteBatch);
             spriteBatch.End();
@@ -197,6 +215,28 @@ namespace Motorki
             checkBox1.Text = "checkbox1";
             checkBox1.PositionAndSize = new Rectangle(combo1.PositionAndSize.X, combo1.PositionAndSize.Bottom + 5, 0, 0);
             UI.Add(checkBox1);
+        }
+
+        private void CreateSteeringTestUI()
+        {
+            UIButton btnSteering = new UIButton(this);
+            btnSteering.Name = "btnSteering";
+            btnSteering.Text = "Steering: Relative";
+            btnSteering.PositionAndSize = new Rectangle(0, 0, 200, 30);
+            btnSteering.Action += (UIButton_Action)((btn) =>
+            {
+                if (((PlayerMotor)motorek).steering == PlayerMotor.Streering.Absolute)
+                {
+                    ((PlayerMotor)motorek).steering = PlayerMotor.Streering.Relative;
+                    btn.Text = "Steering: Relative";
+                }
+                else
+                {
+                    ((PlayerMotor)motorek).steering = PlayerMotor.Streering.Absolute;
+                    btn.Text = "Steering: Absolute";
+                }
+            });
+            UI.Add(btnSteering);
         }
 
         #endregion
