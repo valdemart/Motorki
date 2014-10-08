@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{94F83D32-034B-49D3-A0EA-765532DB33AB}</ProjectGuid>
+    <ProjectGuid>{64D3E31A-FB22-454D-8ACC-A295F5D20DBA}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -14,7 +14,7 @@
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
-    <XnaCrossPlatformGroupID>f9bab2b8-29f9-4df7-bcd0-5066e04387c5</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>b11fdcf2-512c-41b7-a98b-4dbc3889a5d7</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
@@ -60,50 +60,98 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Net" />
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotMotor.cs" />
+    <Compile Include="GameClasses\Bonus.cs" />
+    <Compile Include="GameClasses\BotMotor.cs" />
+    <Compile Include="GameClasses\GamePlay.cs" />
+    <Compile Include="GameClasses\Map.cs" />
+    <Compile Include="GameClasses\Motorek.cs" />
+    <Compile Include="GameClasses\Networking_GameClient.cs" />
+    <Compile Include="GameClasses\Networking_GameServer.cs" />
+    <Compile Include="GameClasses\Networking_Helpers.cs" />
+    <Compile Include="GameClasses\Networking_UDPBroad.cs" />
+    <Compile Include="GameClasses\Networking_UDPMulti.cs" />
+    <Compile Include="GameClasses\PlayerMotor.cs" />
+    <Compile Include="GameClasses\Utils.cs" />
+    <Compile Include="GameScreens\GameScreen_GameUI.cs" />
     <Compile Include="GameScreens\GameScreen_JoinGame.cs" />
     <Compile Include="GameScreens\GameScreen_MainMenu.cs" />
     <Compile Include="GameScreens\GameScreen_MenuScreen.cs" />
+    <Compile Include="GameScreens\GameScreen_Misc.cs" />
     <Compile Include="GameScreens\GameScreen_NewGame.cs" />
     <Compile Include="GameScreens\GameScreen_Options.cs" />
     <Compile Include="GameSettings.cs" />
-    <Compile Include="Motorek.cs" />
+    <Compile Include="InputEvents.cs" />
+    <Compile Include="MotorkiGame.cs" />
     <Compile Include="MouseCursor.cs" />
-    <Compile Include="PlayerMotor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="MotorkiGame.cs" />
-    <Compile Include="InputEvents.cs" />
     <Compile Include="UIClasses\UIButton.cs" />
     <Compile Include="UIClasses\UICheckBox.cs" />
+    <Compile Include="UIClasses\UIComboBox.cs" />
     <Compile Include="UIClasses\UIControl.cs" />
     <Compile Include="UIClasses\UIControlContainer.cs" />
+    <Compile Include="UIClasses\UIExceptions.cs" />
+    <Compile Include="UIClasses\UIImage.cs" />
+    <Compile Include="UIClasses\UIKeyPicker.cs" />
     <Compile Include="UIClasses\UILabel.cs" />
     <Compile Include="UIClasses\UIListBox.cs" />
     <Compile Include="UIClasses\UIParent.cs" />
-    <Compile Include="UIClasses\UIExceptions.cs" />
+    <Compile Include="UIClasses\UIProgress.cs" />
     <Compile Include="UIClasses\UIScrollBar.cs" />
+    <Compile Include="UIClasses\UITaggedValue.cs" />
     <Compile Include="UIClasses\UITextBox.cs" />
-    <Compile Include="UIClasses\UIComboBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
-    <Content Include="GameThumbnail.png">
-      <XnaPlatformSpecific>true</XnaPlatformSpecific>
-    </Content>
+    <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MotorkiContent\MotorkiContent.contentproj">
@@ -127,9 +175,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
       <Visible>False</Visible>
-      <ProductName>Windows Installer 4.5</ProductName>
+      <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>

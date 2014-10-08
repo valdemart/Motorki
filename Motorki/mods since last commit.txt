@@ -1,25 +1,97 @@
-- Motorek class
-- PlayerMotor/BotMotor classes
-- PlayerMotor steering relative/absolute (plus testing UI)
-- some memory saving fixes
-- game settings support: class, xml import/export
-- classes for game menus (declared, not defined)
+legend:
++ - to do
+- - done
+* - in progress
+# - ready for tests
+? - possibly to do
+
+- VS2012 -> VS2010
+- menus
+	- main menu
+	- new game (complete but some features locked)
+	- bot/paleyrs setup in new game
+	- options (full support except audio settings lock)
+	- sample bikes shifted to menu UI background
+- menu flow processor
+- UIClasses
+	- proper TextLengthLimit in UITextBox
+	- UITaggedValue support for UIComboBox, UIComboListBox and UIListBox
+	- UIImage
+	- UIKeyPicker
+	- UIProgress
+	- UIParent ESC hook
+	- small bug-fixes
+	! font property made single-writable but possible to clear using "set null -> set destination"
+- InputEvents deregister
+- textures
+	- menu logos
+	- update in common
+- set initial graph mode to first accessible or the one saved in settings.xml
+	- drawing to rendertarget and scaling to current window/screen size
+- changed layerDepth to int - use of multiple rendertargets instead of filtering by depth
+- MotorTrace classes (yet without collisions)
+- bikes
+	- force forward movement (brakes in relative steering)
+	- repaired bot randomization
+	- speed decrease -> bonus *1.5, brake *0.5
+	- bike pointers and names
+	- sample bug-fixes
+- game
+	- map format (paper version documentation, implemented)
+	- game types (implemented)
+	- proper camera usage
+	- map collisions
+	- bike/trace and bike/bike collisions (experimental but works)
+		- some fixes -> maybe will stay
+	- respawns (immediate only - should be over time and giving some immortality period)
+	- map crate fix
+	- changed to gameMotorsTable
+	- added support for MaxPlayers map property
+- networking
+	- basic udp communication classes
 
 todo:
++ connecting
+	+ cancel
++ maps
+	+ notify map loading progress to loading screen
+	+ drawing to split screen part (to be done when GamePlayScreen will be available)
+	# test what will happen if many motors spawn at the same place&time
++ minimap
++ textures
+	+ bonus textures
 ? add animations into UIClasses controls
-+ track class (decide between circular elements or bar)
-+ networking
+* networking
+	+ read bot sophistication, connected count and max count in EnumerateServers
+	+ NetPlayerMotor class
 + audio support
 * finish implementing game menus and screens
-	+ need: decide map format (to implement GameSettings::SelectMap)
-	+ need: map list
 	+ partially need: networking (for JoinGame support - NewGame can work in offline if it needs)
-	+ need: menu logos
-	+ need: (project) <options>:C (common options)
-	+ need: UIProgress
-	+ need: menu flow processor
-+ UI: UIProgress
-+ game: collision detection
-+ game: map format
-+ game: game types
-+ game: UI
+	? need: anchors in UIControl
+	+ New game - push to Loading screen
+	+ game play init: split screen and two player support
++ game
+	! error: frag counter in deathmatch is not changing
+	+ unlock team game modes
+	* GamePlay class (game progress processor; also network client)
+	+ bonus storage (map contains bonus accessibility for game; server generates bonusses)
+	* collision detection
+		+ rebounds (change algorithm)
+	* UI
+		+ frag/point counters
+			+ team notifications
+			# demolition notifications (counter should show how many of all motors is still alive)
+		+ party members
+		+ split screen
+	# game types (implementation)
+	+ check team spawn obtaining method
+? UI: move state shifting to switch-case scheme (instead of ?: scheme) - state machines for documentation
+? UI: lock unused properties accessibility
+? UI: anchors
+<engineer>
++ bots
+	+ bot menu
+	+ bot sophistication normal/hard
+	+ bot sophistication for new game (in other settings? rather in new game directly)
++ map
+	+ more maps

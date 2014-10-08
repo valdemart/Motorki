@@ -1,0 +1,1092 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html class="js" xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C# UDP Multicasting Tutorial | Jarloo</title>
+
+<link rel="stylesheet" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/colorpicker.css" type="text/css" media="screen">
+
+<link href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/css.css" rel="stylesheet" type="text/css">
+<link href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/css_003.css" rel="stylesheet" type="text/css">
+
+<link rel="alternate" type="application/rss+xml" title="Jarloo RSS Feed" href="http://www.jarloo.com/feed/">
+<link rel="alternate" type="application/atom+xml" title="Jarloo Atom Feed" href="http://www.jarloo.com/feed/atom/">
+<link rel="pingback" href="http://www.jarloo.com/xmlrpc.php">
+
+<!--[if lt IE 7]>
+	<link rel="stylesheet" type="text/css" href="http://www.jarloo.com/wp-content/themes/Feather/css/ie6style.css" />
+	<script type="text/javascript" src="http://www.jarloo.com/wp-content/themes/Feather/js/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script type="text/javascript">DD_belatedPNG.fix('img#logo, span.overlay, a.zoom-icon, a.more-icon, #menu, #menu-right, #menu-content, ul#top-menu ul, #menu-bar, .footer-widget ul li, span.post-overlay, #content-area, .avatar-overlay, .comment-arrow, .testimonials-item-bottom, #quote, #bottom-shadow, #quote .container');</script>
+<![endif]-->
+<!--[if IE 7]>
+	<link rel="stylesheet" type="text/css" href="http://www.jarloo.com/wp-content/themes/Feather/css/ie7style.css" />
+<![endif]-->
+<!--[if IE 8]>
+	<link rel="stylesheet" type="text/css" href="http://www.jarloo.com/wp-content/themes/Feather/css/ie8style.css" />
+<![endif]-->
+
+<script src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/ga.js" async="" type="text/javascript"></script><script src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/button-loader.js" async="" type="text/javascript"></script><script type="text/javascript">
+	document.documentElement.className = 'js';
+</script>
+
+<link rel="alternate" type="application/rss+xml" title="Jarloo » Feed" href="http://www.jarloo.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="Jarloo » Comments Feed" href="http://www.jarloo.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Jarloo » C# UDP Multicasting Tutorial Comments Feed" href="http://www.jarloo.com/c-udp-multicasting-tutorial/feed/">
+<meta content="Feather v.1.5" name="generator"><link media="screen" type="text/css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/jquery.css" rel="stylesheet">
+<link media="screen" type="text/css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/page_templates.css" rel="stylesheet"><link rel="stylesheet" id="jetpack-subscriptions-css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/subscriptions.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-polls-css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/polls-css.css" type="text/css" media="all">
+<link rel="stylesheet" id="jetpack-widgets-css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/widgets.css" type="text/css" media="all">
+<link rel="stylesheet" id="et-shortcodes-css-css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/shortcodes.css" type="text/css" media="all">
+<link rel="stylesheet" id="sharedaddy-css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/sharing.css" type="text/css" media="all">
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/jquery_004.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/jquery-migrate.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/jquery.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/et_shortcodes_frontend.js"></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.jarloo.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.jarloo.com/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="C# Conversion Extension Method" href="http://www.jarloo.com/c-conversion-extension-method/">
+<link rel="next" title="EBay API in C#" href="http://www.jarloo.com/ebay-api-in-csharp/">
+<meta name="generator" content="WordPress 3.9.1">
+<link rel="shortlink" href="http://wp.me/p1cMSW-4M">
+<style type="text/css">
+.wp-polls .pollbar {
+	margin: 1px;
+	font-size: 6px;
+	line-height: 8px;
+	height: 8px;
+	background-image: url('http://www.jarloo.com/wp-content/plugins/wp-polls/images/default/pollbg.gif');
+	border: 1px solid #41840a;
+}
+</style>
+<!-- used in scripts --><meta name="et_featured_auto_speed" content="7000"><meta name="et_disable_toptier" content="0"><meta name="et_featured_slider_auto" content="1"><meta name="et_theme_folder" content="http://www.jarloo.com/wp-content/themes/Feather"><style type="text/css">body { background-color: #1a1a1a; }body { background-image: url(http://www.jarloo.com/wp-content/themes/Feather/images/body-bg16.png); }</style><link id="droid_sans" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/css_002.css" rel="stylesheet" type="text/css"><style type="text/css">h1,h2,h3,h4,h5,h6 { font-family: 'Droid Sans', Arial, sans-serif !important;  }</style><style type="text/css">h1,h2,h3,h4,h5,h6 {  }
+		#featured h2 a, #footer h4.widgettitle { color: #fff !important; }
+		</style><link id="droid_sans" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/css_002.css" rel="stylesheet" type="text/css"><style type="text/css">body, .blurb h3.title, #footer h4.widgettitle, .widget h4.title { font-family: 'Droid Sans', Arial, sans-serif !important;  !important }</style><style type="text/css">body {  }</style>
+<!-- All in One SEO Pack 2.1.2 by Michael Torbert of Semper Fi Web Design[289,335] -->
+<meta name="keywords" content="csharp,multicasting,udp,networking,tutorials">
+
+<link rel="canonical" href="http://www.jarloo.com/c-udp-multicasting-tutorial/">
+<!-- /all in one seo pack -->
+<link href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/shCore.css" type="text/css" rel="stylesheet"><link href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/shThemeDefault.css" type="text/css" rel="stylesheet"><style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<link rel="stylesheet" type="text/css" id="gravatar-card-css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/hovercard.css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/services.css"><link rel="stylesheet" href="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/bittip-css.css" type="text/css"></head>
+<body class="single single-post postid-296 single-format-standard gecko">
+	<div id="top">
+		<div class="container clearfix">
+						<div id="logo-area">
+				<a href="http://www.jarloo.com/">
+										<img src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/logo5.png" alt="Feather Logo" id="logo">
+				</a>
+				<p id="slogan">C# Code, Tutorials and Full Visual Studio Projects</p>
+			</div> <!-- end #logo-area -->
+			<div id="menu">
+				<div id="menu-right">
+					<div id="menu-content" class="clearfix">
+						<ul id="top-menu" class="nav sf-js-enabled"><li id="menu-item-9" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9"><a title="jarloo" href="http://jarloo.com/">Home</a></li>
+<li id="menu-item-6" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-has-children menu-item-6"><a class="sf-with-ul" title="c# code examples and snippets" href="http://www.jarloo.com/category/code/">Code<span class="sf-sub-indicator"> »</span></a>
+<ul style="display: none; visibility: hidden;" class="sub-menu"><li class="menu-gradient"></li>
+	<li id="menu-item-10" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-10"><a title="c# animation code" href="http://www.jarloo.com/category/code/animation/">Animation</a></li>
+	<li id="menu-item-11" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11"><a title="c# api code" href="http://www.jarloo.com/category/code/api-code/">API</a></li>
+	<li id="menu-item-971" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-971"><a href="http://www.jarloo.com/category/code/botting-code/">Botting</a></li>
+	<li id="menu-item-13" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-13"><a title="c# database code" href="http://www.jarloo.com/category/code/database/">Database</a></li>
+	<li id="menu-item-846" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-846"><a href="http://www.jarloo.com/category/code/financial/">Financial</a></li>
+	<li id="menu-item-14" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-14"><a href="http://www.jarloo.com/category/code/graphics/">Graphics</a></li>
+	<li id="menu-item-15" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-15"><a title="c# math code" href="http://www.jarloo.com/category/code/math/">Math</a></li>
+	<li id="menu-item-16" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-16"><a title="c# networking code" href="http://www.jarloo.com/category/code/networking/">Networking</a></li>
+	<li id="menu-item-17" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-17"><a title="c# security code" href="http://www.jarloo.com/category/code/security/">Security</a></li>
+	<li id="menu-item-18" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-18"><a title="c# sound code" href="http://www.jarloo.com/category/code/sound-code/">Sound</a></li>
+	<li id="menu-item-19" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-19"><a title="WPF – Windows Presentation Foundation Code (XAML)" href="http://www.jarloo.com/category/code/wpf/">WPF</a></li>
+</ul>
+</li>
+<li id="menu-item-8" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8"><a title="c# tips and tricks" href="http://www.jarloo.com/category/tips-tricks/">Tips &amp; Tricks</a></li>
+<li id="menu-item-20" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-20"><a title="c# tutorials" href="http://www.jarloo.com/category/tutorials/">Tutorials</a></li>
+<li id="menu-item-353" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-353"><a title="full visual studio projects" href="http://www.jarloo.com/category/code/projects/">Projects</a></li>
+<li id="menu-item-354" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-354"><a href="http://www.jarloo.com/category/cheat-sheets/">Cheat Sheets</a></li>
+<li id="menu-item-7" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-7"><a class="sf-with-ul" title="c# news" href="http://www.jarloo.com/category/news/">News<span class="sf-sub-indicator"> »</span></a>
+<ul style="display: none; visibility: hidden;" class="sub-menu"><li class="menu-gradient"></li>
+	<li id="menu-item-12" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12"><a title="c# and visual studio bugs" href="http://www.jarloo.com/category/news/bugs/">Bugs</a></li>
+</ul>
+</li>
+<li id="menu-item-605" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-605"><a class="sf-with-ul" title="about jarloo.com" href="http://www.jarloo.com/about/">About<span class="sf-sub-indicator"> »</span></a>
+<ul style="display: none; visibility: hidden;" class="sub-menu"><li class="menu-gradient"></li>
+	<li id="menu-item-614" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-614"><a href="http://www.jarloo.com/about/sitemap/">Sitemap</a></li>
+	<li id="menu-item-623" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-623"><a title="Send us a message" href="http://www.jarloo.com/about/contact-us/">Contact Us</a></li>
+	<li id="menu-item-622" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-622"><a title="Jarloo.com Disclaimer" href="http://www.jarloo.com/about/disclaimer/">Disclaimer</a></li>
+	<li id="menu-item-624" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-624"><a title="Jarloo.com Privacy Policy" href="http://www.jarloo.com/about/privacy-policy/">Privacy Policy</a></li>
+</ul>
+</li>
+</ul>						
+						<div id="et-social-icons">
+							<a href="http://twitter.com/jarloocode" target="_blank"><img alt="Twitter" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/twitter.png"></a><a href="http://www.jarloo.com/comments/feed/" target="_blank"><img alt="Rss" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/rss.png"></a>						</div>
+					</div> <!-- end #menu-content -->		
+				</div> <!-- end #menu-right -->		
+			</div> <!-- end #menu -->
+			<div class="clear"></div>
+			<div id="category-name">
+		<h1 class="title">C# UDP Multicasting Tutorial</h1>
+		
+				<p class="meta-info">
+					Posted  by <a href="http://www.jarloo.com/author/admin/" title="Posts by Kelly Elias" rel="author">Kelly Elias</a> on Dec 13, 2010 in <a href="http://www.jarloo.com/category/code/networking/" title="View all posts in Networking" rel="category tag">Networking</a>, <a href="http://www.jarloo.com/category/tutorials/" title="View all posts in Tutorials" rel="category tag">Tutorials</a> | <a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comments" title="Comment on C# UDP Multicasting Tutorial">15 comments</a>			</p>
+	</div> <!-- end #category-name -->					
+			
+		</div> <!-- end .container -->
+	</div> <!-- end #top -->
+	
+	<div id="content">
+		<div class="container">
+<div id="content-area" class="clearfix">
+	<div id="left-area">
+			<div class="entry post clearfix">
+				    
+						
+											
+									<div class="post-thumbnail">
+						<img src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/network-90556_178x178.jpg" class="post-thumb" alt="C# UDP Multicasting Tutorial" title="C# UDP Multicasting Tutorial">						<span class="post-overlay"></span>
+					</div> 	<!-- end .post-thumbnail -->
+										
+
+			<p>Learn how to use a UDP Multicast in c# to quickly send data from 
+one machine to a next. This method is commonly refered to as a UDP 
+rendezvous.(yes probably why Tibco’s product that does this is called 
+rendezvous)</p>
+<p>
+This tutorial will consist of two programs:</p>
+<ul>
+<li>Server (Sender) – a console app that is responsible for sending messages</li>
+<li>Client (Listener) – a console app that is responsible for recieving messages</li>
+</ul>
+<p>The reason they are both console apps is to keep things simple.
+</p>
+<h2>UDP Multicasting 101</h2>
+<p>Before we jump into the code there are a few things that you need to know.</p>
+<p>
+Technically multicasting addresses must be between 224.0.0.0 to 
+239.255.255.255, but 224.0.0.0 to 224.0.0.255 is reserved for routing 
+info so you should really only use 224.0.1.0 to 239.255.255.255.
+</p>
+<p>
+For the port number you can choose anything you like but it’s best do 
+investigate the port you choose a bit so you don’t conflict with 
+something already using that port. A good place to look is <a href="http://en.wikipedia.org/wiki/Multicast_address">wikipedia</a>
+</p>
+<h2>UDP Multicasting C# Server (Sender)</h2>
+<p>The server must make a connection to our multicast address and then 
+join our multicast group. By joining the group we can add content to it,
+ which gets delivered to anyone else in the group.</p>
+<div><div id="highlighter_969161" class="syntaxhighlighter  csharp"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="csharp plain">IPAddress multicastaddress = IPAddress.Parse(</code><code class="csharp string">"239.0.0.222"</code><code class="csharp plain">); </code></div><div class="line number2 index1 alt1"><code class="csharp plain">udpclient.JoinMulticastGroup(multicastaddress);</code></div><div class="line number3 index2 alt2"><code class="csharp plain">IPEndPoint remoteep = </code><code class="csharp keyword">new</code> <code class="csharp plain">IPEndPoint(multicastaddress, 2222);</code></div></div></td></tr></tbody></table></div></div>
+<p>Really that is it. The rest is just to encode the message and send it like so:</p>
+<div><div id="highlighter_769098" class="syntaxhighlighter  csharp"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="csharp plain">Byte[] buffer = </code><code class="csharp keyword">null</code><code class="csharp plain">;</code></div><div class="line number2 index1 alt1"><code class="csharp keyword">for</code> <code class="csharp plain">(</code><code class="csharp keyword">int</code> <code class="csharp plain">i = 0; i &lt;= 8000; i++)</code></div><div class="line number3 index2 alt2"><code class="csharp plain">{</code></div><div class="line number4 index3 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">buffer = Encoding.Unicode.GetBytes(i.ToString());</code></div><div class="line number5 index4 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">udpclient.Send(buffer, buffer.Length, remoteep);</code></div><div class="line number6 index5 alt1"><code class="csharp plain">}</code></div></div></td></tr></tbody></table></div></div>
+<p>Now because this is a Console app we can add a new messages in there to see whats going on. The complete class looks like this:</p>
+<div><div id="highlighter_298187" class="syntaxhighlighter  csharp"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div><div class="line number24 index23 alt1">24</div><div class="line number25 index24 alt2">25</div><div class="line number26 index25 alt1">26</div><div class="line number27 index26 alt2">27</div><div class="line number28 index27 alt1">28</div><div class="line number29 index28 alt2">29</div><div class="line number30 index29 alt1">30</div><div class="line number31 index30 alt2">31</div><div class="line number32 index31 alt1">32</div><div class="line number33 index32 alt2">33</div><div class="line number34 index33 alt1">34</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="csharp keyword">using</code> <code class="csharp plain">System;</code></div><div class="line number2 index1 alt1"><code class="csharp keyword">using</code> <code class="csharp plain">System.Net;</code></div><div class="line number3 index2 alt2"><code class="csharp keyword">using</code> <code class="csharp plain">System.Net.Sockets;</code></div><div class="line number4 index3 alt1"><code class="csharp keyword">using</code> <code class="csharp plain">System.Text;</code></div><div class="line number5 index4 alt2">&nbsp;</div><div class="line number6 index5 alt1"><code class="csharp keyword">namespace</code> <code class="csharp plain">Jarloo.Sender</code></div><div class="line number7 index6 alt2"><code class="csharp plain">{</code></div><div class="line number8 index7 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp keyword">internal</code> <code class="csharp keyword">class</code> <code class="csharp plain">Program</code></div><div class="line number9 index8 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">{</code></div><div class="line number10 index9 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp keyword">private</code> <code class="csharp keyword">static</code> <code class="csharp keyword">void</code> <code class="csharp plain">Main(</code><code class="csharp keyword">string</code><code class="csharp plain">[] args)</code></div><div class="line number11 index10 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">{</code></div><div class="line number12 index11 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">UdpClient udpclient = </code><code class="csharp keyword">new</code> <code class="csharp plain">UdpClient();</code></div><div class="line number13 index12 alt2">&nbsp;</div><div class="line number14 index13 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">IPAddress multicastaddress = IPAddress.Parse(</code><code class="csharp string">"239.0.0.222"</code><code class="csharp plain">); </code></div><div class="line number15 index14 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">udpclient.JoinMulticastGroup(multicastaddress);</code></div><div class="line number16 index15 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">IPEndPoint remoteep = </code><code class="csharp keyword">new</code> <code class="csharp plain">IPEndPoint(multicastaddress, 2222);</code></div><div class="line number17 index16 alt2">&nbsp;</div><div class="line number18 index17 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Byte[] buffer = </code><code class="csharp keyword">null</code><code class="csharp plain">;</code></div><div class="line number19 index18 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>&nbsp;</div><div class="line number20 index19 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Console.WriteLine(</code><code class="csharp string">"Press ENTER to start sending messages"</code><code class="csharp plain">);</code></div><div class="line number21 index20 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Console.ReadLine();</code></div><div class="line number22 index21 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>&nbsp;</div><div class="line number23 index22 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp keyword">for</code> <code class="csharp plain">(</code><code class="csharp keyword">int</code> <code class="csharp plain">i = 0; i &lt;= 8000; i++)</code></div><div class="line number24 index23 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">{</code></div><div class="line number25 index24 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">buffer = Encoding.Unicode.GetBytes(i.ToString());</code></div><div class="line number26 index25 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">udpclient.Send(buffer, buffer.Length, remoteep);</code></div><div class="line number27 index26 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Console.WriteLine(</code><code class="csharp string">"Sent "</code> <code class="csharp plain">+ i);</code></div><div class="line number28 index27 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">}</code></div><div class="line number29 index28 alt2">&nbsp;</div><div class="line number30 index29 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Console.WriteLine(</code><code class="csharp string">"All Done! Press ENTER to quit."</code><code class="csharp plain">);</code></div><div class="line number31 index30 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Console.ReadLine();</code></div><div class="line number32 index31 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">}</code></div><div class="line number33 index32 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">}</code></div><div class="line number34 index33 alt1"><code class="csharp plain">}</code></div></div></td></tr></tbody></table></div></div>
+<h2>UDP Multicasting C# Client (Listener)</h2>
+<p>Like the server the client must also connect to the multicast group</p>
+<div><div id="highlighter_509543" class="syntaxhighlighter  csharp"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="csharp plain">UdpClient client = </code><code class="csharp keyword">new</code> <code class="csharp plain">UdpClient();</code></div><div class="line number2 index1 alt1">&nbsp;</div><div class="line number3 index2 alt2"><code class="csharp plain">IPEndPoint localEp = </code><code class="csharp keyword">new</code> <code class="csharp plain">IPEndPoint(IPAddress.Any, 2222);</code></div><div class="line number4 index3 alt1"><code class="csharp plain">client.Client.Bind(localEp);</code></div><div class="line number5 index4 alt2">&nbsp;</div><div class="line number6 index5 alt1"><code class="csharp plain">IPAddress multicastaddress = IPAddress.Parse(</code><code class="csharp string">"239.0.0.222"</code><code class="csharp plain">);</code></div><div class="line number7 index6 alt2"><code class="csharp plain">client.JoinMulticastGroup(multicastaddress);</code></div></div></td></tr></tbody></table></div></div>
+<p>Notice the code looks very similiar to the sender we created except 
+that we bind to an endpoint. This is necessary as we will be listening 
+for incoming data.</p>
+<p>So now that were connected we just need to listen for messages and do something with them.</p>
+<div><div id="highlighter_467951" class="syntaxhighlighter  csharp"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="csharp keyword">while</code> <code class="csharp plain">(</code><code class="csharp keyword">true</code><code class="csharp plain">)</code></div><div class="line number2 index1 alt1"><code class="csharp plain">{</code></div><div class="line number3 index2 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Byte[] data = client.Receive(</code><code class="csharp keyword">ref</code> <code class="csharp plain">remote);</code></div><div class="line number4 index3 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp keyword">string</code> <code class="csharp plain">strData = Encoding.Unicode.GetString(data);</code></div><div class="line number5 index4 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Console.WriteLine(strData);</code></div><div class="line number6 index5 alt1"><code class="csharp plain">}</code></div></div></td></tr></tbody></table></div></div>
+<p>Yes that is an infinate loop. (this is just for demonstration 
+purposes remember?) To close this client down you will have to kill it. 
+Yes there are easier ways including sending a quit message from the 
+server etc.. etc.., but I didn’t want to add a bunch of code that would 
+confuse things here.<br>
+Also important to note is that the client.Receive call is blocking. This
+ means that code execution will halt on that line until a message is 
+received. So if you do something similiar in your own programs you would
+ either want this on a different thread or you would want to use the 
+async methods instead. (Async methods are best because if you 
+multi-thread it, to stop the client you will need to interrupt the 
+thread which will throw an exception.)</p>
+<p>One issue you’ll discover is that you can only have a single listener
+ working on a machine at a time. This is because the port is set for 
+exclusive use. So if you want multiple Listeners on a single machine you
+ will need to change this by doing this:</p>
+<div><div id="highlighter_859893" class="syntaxhighlighter  csharp"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="csharp plain">client.ExclusiveAddressUse = </code><code class="csharp keyword">false</code><code class="csharp plain">;</code></div><div class="line number2 index1 alt1"><code class="csharp plain">IPEndPoint localEp = </code><code class="csharp keyword">new</code> <code class="csharp plain">IPEndPoint(IPAddress.Any, 2222);</code></div><div class="line number3 index2 alt2">&nbsp;</div><div class="line number4 index3 alt1"><code class="csharp plain">client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, </code><code class="csharp keyword">true</code><code class="csharp plain">);</code></div><div class="line number5 index4 alt2"><code class="csharp plain">client.ExclusiveAddressUse = </code><code class="csharp keyword">false</code><code class="csharp plain">;</code></div></div></td></tr></tbody></table></div></div>
+<p>This would go right under the creation of the UdpClient. </p>
+<p>The complete code the Listener looks like this:</p>
+<div><div id="highlighter_432311" class="syntaxhighlighter  csharp"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div><div class="line number24 index23 alt1">24</div><div class="line number25 index24 alt2">25</div><div class="line number26 index25 alt1">26</div><div class="line number27 index26 alt2">27</div><div class="line number28 index27 alt1">28</div><div class="line number29 index28 alt2">29</div><div class="line number30 index29 alt1">30</div><div class="line number31 index30 alt2">31</div><div class="line number32 index31 alt1">32</div><div class="line number33 index32 alt2">33</div><div class="line number34 index33 alt1">34</div><div class="line number35 index34 alt2">35</div><div class="line number36 index35 alt1">36</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="csharp keyword">using</code> <code class="csharp plain">System;</code></div><div class="line number2 index1 alt1"><code class="csharp keyword">using</code> <code class="csharp plain">System.Collections.Generic;</code></div><div class="line number3 index2 alt2"><code class="csharp keyword">using</code> <code class="csharp plain">System.Net;</code></div><div class="line number4 index3 alt1"><code class="csharp keyword">using</code> <code class="csharp plain">System.Net.Sockets;</code></div><div class="line number5 index4 alt2"><code class="csharp keyword">using</code> <code class="csharp plain">System.Text;</code></div><div class="line number6 index5 alt1">&nbsp;</div><div class="line number7 index6 alt2"><code class="csharp keyword">namespace</code> <code class="csharp plain">Jarloo.Listener</code></div><div class="line number8 index7 alt1"><code class="csharp plain">{</code></div><div class="line number9 index8 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp keyword">internal</code> <code class="csharp keyword">class</code> <code class="csharp plain">Program</code></div><div class="line number10 index9 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">{</code></div><div class="line number11 index10 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp keyword">private</code> <code class="csharp keyword">static</code> <code class="csharp keyword">void</code> <code class="csharp plain">Main(</code><code class="csharp keyword">string</code><code class="csharp plain">[] args)</code></div><div class="line number12 index11 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">{</code></div><div class="line number13 index12 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">UdpClient client = </code><code class="csharp keyword">new</code> <code class="csharp plain">UdpClient();</code></div><div class="line number14 index13 alt1">&nbsp;</div><div class="line number15 index14 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">client.ExclusiveAddressUse = </code><code class="csharp keyword">false</code><code class="csharp plain">;</code></div><div class="line number16 index15 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">IPEndPoint localEp = </code><code class="csharp keyword">new</code> <code class="csharp plain">IPEndPoint(IPAddress.Any, 2222);</code></div><div class="line number17 index16 alt2">&nbsp;</div><div class="line number18 index17 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, </code><code class="csharp keyword">true</code><code class="csharp plain">);</code></div><div class="line number19 index18 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">client.ExclusiveAddressUse = </code><code class="csharp keyword">false</code><code class="csharp plain">;</code></div><div class="line number20 index19 alt1">&nbsp;</div><div class="line number21 index20 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">client.Client.Bind(localEp);</code></div><div class="line number22 index21 alt1">&nbsp;</div><div class="line number23 index22 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">IPAddress multicastaddress = IPAddress.Parse(</code><code class="csharp string">"239.0.0.222"</code><code class="csharp plain">);</code></div><div class="line number24 index23 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">client.JoinMulticastGroup(multicastaddress);</code></div><div class="line number25 index24 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>&nbsp;</div><div class="line number26 index25 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Console.WriteLine(</code><code class="csharp string">"Listening this will never quit so you will need to ctrl-c it"</code><code class="csharp plain">);</code></div><div class="line number27 index26 alt2">&nbsp;</div><div class="line number28 index27 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp keyword">while</code> <code class="csharp plain">(</code><code class="csharp keyword">true</code><code class="csharp plain">)</code></div><div class="line number29 index28 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">{</code></div><div class="line number30 index29 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Byte[] data = client.Receive(</code><code class="csharp keyword">ref</code> <code class="csharp plain">localEp);</code></div><div class="line number31 index30 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp keyword">string</code> <code class="csharp plain">strData = Encoding.Unicode.GetString(data);</code></div><div class="line number32 index31 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">Console.WriteLine(strData);</code></div><div class="line number33 index32 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">}</code></div><div class="line number34 index33 alt1"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">}</code></div><div class="line number35 index34 alt2"><code class="csharp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="csharp plain">}</code></div><div class="line number36 index35 alt1"><code class="csharp plain">}</code></div></div></td></tr></tbody></table></div></div>
+<h2>Summary</h2>
+<p>UDP Multicasting is a great way to send around data but there are a 
+few things to look at to determine if this method is right for you.</p>
+<h3>Pros</h3>
+<ul>
+<li>Requires no dedicated server. Your client and server can be the same
+ app, making this a very nice distributed solution with no single point 
+of failure.</li>
+<li>Fast. Very, very fast. Since there are no extra jumps to servers and translation etc the code executes very fast.</li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li>Messages are not guaranteed. They can be lost, so if your passing 
+around something critical like banking transactions this wouldn’t be a 
+good idea.</li>
+</ul>
+<p>
+Common uses for this style of architecture are in places where data is 
+updating very quickly and each message sent has a very short lifespan. 
+You see this being used in trading shops quite a bit for sending prices.
+ If a single price is lost, it’s not that big of a deal because another 
+one will follow in seconds.
+</p>
+<h2>Alternatives</h2>
+<p>If your looking to route data to multiple machines the problem has 
+been tackled before, and there are some great open source projects that 
+work very well and can help. Two I would recommend are:</p>
+<ul>
+<li><a href="http://www.rabbitmq.com/" target="_blank">RabbitMQ</a> – 
+This is the easiest setup for a queuing system I have seen, and it once 
+you get it up and running it just works without issue. I’ve been using 
+this in a production scenario for over a year and am very happy with it.
+ Used to use ActiveMQ but I’ve found this much better and more reliable.<br>
+I have a <a href="http://www.jarloo.com/rabbitmq-c-tutorial/">RabbitMQ Tutorial</a> if your interested.</li>
+<li><a href="http://www.zeromq.org/" target="_blank">ZeroMQ</a> – This one I haven’t personally used yet, but it sounds very good and it created to be extremely low latency.</li>
+</ul>
+<p>
+Hope you enjoyed this tutorial, if I get the time I’ll post an Async version of this.</p>
+<p><a class="bittip-button" default-amount="0.001" request="count" url="http://www.jarloo.com/c-udp-multicasting-tutorial/" donation-message="" donation-address="1D78KVuRAGUUdWpaYJdoMh3Q6dC29gafqV"><div class="bittip-button-inner">&nbsp;</div></a><div class="bittip-count"><img id="bittip-button-corner" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/button-corner.png"><span count-number="1D78KVuRAGUUdWpaYJdoMh3Q6dC29gafqV">0</span></div></p><script>(function() {var s = document.createElement('script');var t = document.getElementsByTagName('script')[0];s.type = 'text/javascript';s.async = true;var url; if (window.location.protocol == 'https:'){url = 'https://bitcoinsberlin.com/wp-content/uploads/2013/01/button-loader.js'} else { url = 'http://bittip.it/cdn/button-loader.js';};s.src = url;t.parentNode.insertBefore(s, t);})();</script><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-email share-service-visible"><a rel="nofollow" class="share-email sd-button share-icon" href="http://www.jarloo.com/c-udp-multicasting-tutorial/?share=email&amp;nb=1" target="_blank" title="Click to email this to a friend"><span>Email</span></a></li><li class="share-print"><a rel="nofollow" class="share-print sd-button share-icon" href="http://www.jarloo.com/c-udp-multicasting-tutorial/#print" target="_blank" title="Click to print"><span>Print</span></a></li><li class="share-facebook"><a rel="nofollow" class="share-facebook sd-button share-icon" href="http://www.jarloo.com/c-udp-multicasting-tutorial/?share=facebook&amp;nb=1" target="_blank" title="Share on Facebook" id="sharing-facebook-296"><span>Facebook<span class="share-count">7</span></span></a></li><li class="share-twitter"><a rel="nofollow" class="share-twitter sd-button share-icon" href="http://www.jarloo.com/c-udp-multicasting-tutorial/?share=twitter&amp;nb=1" target="_blank" title="Click to share on Twitter" id="sharing-twitter-296"><span>Twitter<span class="share-count">2</span></span></a></li><li class="share-google-plus-1"><a rel="nofollow" class="share-google-plus-1 sd-button share-icon" href="http://www.jarloo.com/c-udp-multicasting-tutorial/?share=google-plus-1&amp;nb=1" target="_blank" title="Click to share on Google+" id="sharing-google-296"><span>Google</span></a></li><li class="share-end"></li></ul></div></div></div><div class="yarpp-related yarpp-related-none">
+</div>
+
+
+	
+									
+		</div> <!-- end .entry -->
+		
+				
+					
+						  <script type="text/javascript"><!--
+google_ad_client = "ca-pub-0246444171295664";
+/* Banner */
+google_ad_slot = "4214741900";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/show_ads.js">
+</script><ins style="display:inline-table;border:none;height:60px;margin:0;padding:0;position:relative;visibility:visible;width:468px;background-color:transparent"><ins id="aswift_0_anchor" style="display:block;border:none;height:60px;margin:0;padding:0;position:relative;visibility:visible;width:468px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;" frameborder="0" height="60" scrolling="no" width="468"></iframe></ins></ins>   
+				
+		<!-- You can start editing here. -->
+
+<div id="comment-wrap">
+
+			
+		<h3 id="comments">15 Comments</h3>
+		<p id="join-comment">Join the conversation and post a comment.</p>
+			
+				
+					<ol class="commentlist clearfix">
+				   <li class="comment even thread-even depth-1" id="li-comment-73">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-73" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-bc23553897b40c591a5fb5761f960d47-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/bc23553897b40c591a5fb5761f960d47.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">F2K</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-73">
+							December 17, 2010 at 9:06 am</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>Great tutorial, but in the client code there is a mistake:<br>
+Byte[] data = client.Receive(ref remote);</p>
+<p>should be:</p>
+<p>Byte[] data = client.Receive(ref localEp);</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-74">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-74" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-f6c326d7075039abf8fe625c2ffa41ec-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/f6c326d7075039abf8fe625c2ffa41ec.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">kelias</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-74">
+							December 17, 2010 at 9:10 am</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>Thanks, I sometimes copy and paste too fast I think.  I’ve updated the article.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1" id="li-comment-75">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-75" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-07e8359afdd7526cdedf56cfde29bca5-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/07e8359afdd7526cdedf56cfde29bca5.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">RAVIMR</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-75">
+							December 25, 2010 at 5:35 am</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>client.JoinMulticastGroup(multicastaddress);<br>
+telling wrong multicastaddress while executing server</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-76">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-76" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-f6c326d7075039abf8fe625c2ffa41ec-1" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/f6c326d7075039abf8fe625c2ffa41ec.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">kelias</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-76">
+							January 10, 2011 at 9:25 pm</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>I would check your IP addresses 
+again, it should work fine. Also ensure if your behind a router that it 
+supports udp multicasting. Depending on your network you may need to 
+specify the number of hops the message will travel.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1" id="li-comment-1076">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-1076" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-c246690cca09a31e9358dfa874a36e86-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/c246690cca09a31e9358dfa874a36e86.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">mike</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-1076">
+							January 24, 2012 at 2:59 pm</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>Great article, thanks!  One Q –  
+what else would need to be done if you wanted to use this from outside 
+the LAN?  I want to write an app  I can use to sleep and wake PC’s on my
+ LAN from my windows phone or from an external PC.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-1077">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-1077" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-f6c326d7075039abf8fe625c2ffa41ec-2" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/f6c326d7075039abf8fe625c2ffa41ec.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">admin</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-1077">
+							January 24, 2012 at 3:16 pm</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>UDP is not the best spec to be 
+using over the internet. Many routers filter the packets out, and the 
+packets typically define a time to live (ttl), which defines a certain 
+number of hops before they die.</p>
+<p>Some products such as Tibco’s Rendezvous would use UDP locally but 
+externally they would tunnel TCP instead, which might be the approach 
+your looking for.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1" id="li-comment-1080">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-1080" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-c246690cca09a31e9358dfa874a36e86-1" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/c246690cca09a31e9358dfa874a36e86.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">Mike</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-1080">
+							January 24, 2012 at 6:20 pm</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>&gt;externally they would tunnel TCP instead, which might be the approach your looking for.</p>
+<p>Thanks again, I will get it working first inside my LAN (thanks to 
+your samples and a sample WP7 app I already have working) and then start
+ looking into how I’d goa bout using TCP tunnelling.  I’ll have a 
+service running on each PC containing the UDP listener, so would need to
+ extend that to also listen for TCP messages I guess.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-1282">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-1282" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-15385ff841fdf5647922a22960cd811a-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/15385ff841fdf5647922a22960cd811a.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">shachar</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-1282">
+							March 17, 2012 at 5:44 am</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>i did something similar , on the 
+same machine i have 3 application that create a udpClient 
+(192.168.1.101-103) that sends data and a udpClient that join’s a 
+multicast group and receiving data).</p>
+<p>my problem is that only 1 application receive data from whoever send data to the multicast group.<br>
+when i close the application the got the data it falls to another , 
+seems that only one ip can on the same machine can get the multicast 
+message.</p>
+<p>is this true? or i’m doing something wrong? </p>
+<p>this is my c’tor:<br>
+<code></code></p><code>
+<p>        public UDPService(IPAddress ip, int port)<br>
+        {<br>
+            var ipEndPoint = new IPEndPoint(IPAddress.Any, port);<br>
+            RemoteEndPoint = new IPEndPoint(ip, port);</p>
+<p>            // http://www.jarloo.com/c-udp-multicasting-tutorial/</p>
+<p>            //sender<br>
+            sender = new UdpClient(AddressFamily.InterNetwork);<br>
+            sender.Client.SendBufferSize = 10000000;<br>
+            sender.MulticastLoopback = true;//send to self.<br>
+            sender.ExclusiveAddressUse = false;</p>
+<p>            //receiver<br>
+            receiver = new UdpClient();<br>
+            receiver.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);<br>
+            receiver.ExclusiveAddressUse = false;<br>
+            receiver.Client.Bind(ipEndPoint);<br>
+            receiver.EnableBroadcast = true;</p>
+</code><p><code>        }<br>
+</code></p>
+<p>then i join to the multicast group<br>
+<code><br>
+       public void JoinMulticastGroup(string ip)<br>
+        {<br>
+            // http://msdn.microsoft.com/en-us/library/2fxkak8t.aspx<br>
+            // The multicast address range is 224.0.0.0 to 239.255.255.255<br>
+            IPAddress multiCastGroup = IPAddress.Parse(ip);<br>
+            receiver.JoinMulticastGroup(multiCastGroup, timeToLive); //timeToLive = hops.<br>
+        }<br>
+</code></p>
+<p>and send data with:<br>
+<code><br>
+        private void MulticastInternal(byte[] data)<br>
+        {<br>
+            sender.Client.SendTimeout = 2000;<br>
+            sender.Connect(RemoteEndPoint);<br>
+            sender.BeginSend(data, data.Length, multicast_Completed, sender);<br>
+        }</code></p><code>
+</code><p><code>        void multicast_Completed(IAsyncResult result)<br>
+        {<br>
+            sender.EndSend(result);<br>
+        }<br>
+</code></p>
+<p>thanks,</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1" id="li-comment-1708">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-1708" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-67163b36ec68dd96800a5e9335e28ffe-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/67163b36ec68dd96800a5e9335e28ffe.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn"><a href="http://www.lavaview.com/" rel="external nofollow" class="url">Leonard Gambrell</a></span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-1708">
+							September 25, 2012 at 7:43 am</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>Can you do this over the interent? I’ve seen many UDP example but none work over the internet only locally.</p>
+<p>Thanks</p>
+<p>LPG</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-2004">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-2004" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-0879c1954a7ee8660f80eafdf9f66776-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/0879c1954a7ee8660f80eafdf9f66776.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">Yury Schkatula</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-2004">
+							February 6, 2013 at 1:40 pm</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>Appending this tutorial, I’d like 
+to say that in case of multiple network interfaces (including VPN) you 
+can experience issues with multicast receiving. It’s necessary to 
+instruct OS to use each possible interface as a “multicast ear”, 
+something like that:</p>
+<p><code><br>
+  NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();<br>
+  foreach (NetworkInterface adapter in nics)<br>
+  {<br>
+    IPInterfaceProperties ip_properties = adapter.GetIPProperties();<br>
+    if (!adapter.GetIPProperties().MulticastAddresses.Any())<br>
+      continue; // most of VPN adapters will be skipped<br>
+    if (!adapter.SupportsMulticast)<br>
+      continue; // multicast is meaningless for this type of connection<br>
+    if (OperationalStatus.Up != adapter.OperationalStatus)<br>
+      continue; // this adapter is off or not connected<br>
+    IPv4InterfaceProperties p = adapter.GetIPProperties().GetIPv4Properties();<br>
+    if (null == p)<br>
+      continue; // IPv4 is not configured on this adapter<br>
+    my_sock.SetSocketOption(SocketOptionLevel.IP, 
+SocketOptionName.MulticastInterface, 
+(int)IPAddress.HostToNetworkOrder(p.Index));<br>
+  }<br>
+</code><br>
+Some notes are <a href="http://windowsasusual.blogspot.ru/2013/01/socket-option-multicast-interface.html" rel="nofollow">here</a>, if you don’t mind.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1" id="li-comment-2097">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-2097" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-23830a9037cb8e435a15c3261038b079-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/23830a9037cb8e435a15c3261038b079.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">J4N</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-2097">
+							February 11, 2013 at 5:56 am</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>I’ve found a little bug:<br>
+<code><br>
+Byte[] data = client.Receive(ref localEp);<br>
+</code></p>
+<p>The problem is that when you receive the message, the client change 
+the IP (the multicast address) by the IP that has send the data(very 
+usefull to know the sender BTW). This means that on the next iteration 
+of your <code>While(true)</code> You will no longer try to read from broadcast but from the IP you got here.</p>
+<p>You should have something like this:<br>
+<code><br>
+IPEndPoint temporaryEP = new IPEndPoint(IPAddress.Any, 2222);<br>
+Byte[] data = client.Receive(ref temporaryEP );<br>
+</code><br>
+in your while loop.</p>
+<p>It resolved a lot problem for me.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-2210">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-2210" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-9a8ea77858853fc2e2765ce10425ec20-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/9a8ea77858853fc2e2765ce10425ec20.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">sakthi</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-2210">
+							February 17, 2013 at 10:23 pm</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>if we have a multiple receiver in a
+ place.if any sound is occurred it will be captured bye the receiver.due
+ to climate change there.may be slight change in time.each node it 
+placed at variance distance.so time will be vary for each nodes.To solve
+ this error,average time is calculated.so approximate time will be 
+known,when the sound has occurred…To write a C# programming…..</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1" id="li-comment-2347">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-2347" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-273a3e443df39435705f58d37ed67d88-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/273a3e443df39435705f58d37ed67d88.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">Peter Smith</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-2347">
+							April 18, 2013 at 12:14 am</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>Hi,</p>
+<p>Just a comment on your Cons – actually reliable multicast (udp) is 
+the main transport the banking industry uses for trading systems because
+ of the reduced latency and bandwidth – typically you might only have to
+ resend one in a million messages so they rarely (I’ve never seen it in 
+production) get lost.</p>
+<p>Also, rolling your own udp framework is extremely hard and time consuming, something like <a href="http://www.jarloo.com/c-udp-multicasting-tutorial/www.mesongo.com/rmf.aspx" rel="nofollow">RMF</a> might be worth considering…</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-2349">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-2349" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-f6c326d7075039abf8fe625c2ffa41ec-3" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/f6c326d7075039abf8fe625c2ffa41ec.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">Kelly Elias</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-2349">
+							April 18, 2013 at 1:21 pm</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>Good points. I’ve used UDP plenty 
+in the past, as well as frameworks that do reliable UDP like Tibco 
+Rendezvous. (I too work in the financial industry, at a commodity 
+trading company.)</p>
+<p>This is the first time I’ve seen mesongo though. Looks interesting, I’ll have to take it for a spin.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1" id="li-comment-3334">
+	    <div class="comment-body-outer">
+			<div class="comment-body">
+			   <div id="comment-3334" class="clearfix">
+					<div class="avatar-box">
+						<img id="grav-2069f919d81a80b482d8bf9af0808893-0" alt="" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/2069f919d81a80b482d8bf9af0808893.jpg" class="avatar avatar-56 photo grav-hashed grav-hijack" height="56" width="56">						<span class="avatar-overlay"></span>
+					</div> <!-- end .avatar-box -->
+					<div class="comment-wrap clearfix">
+						<span class="fn">Ramesh</span>						<div class="comment-meta commentmetadata"><a href="http://www.jarloo.com/c-udp-multicasting-tutorial/#comment-3334">
+							February 21, 2014 at 3:33 am</a>						</div><!-- .comment-meta .commentmetadata -->
+
+						
+						<div class="comment-content"><p>This article is very useful.</p>
+</div> <!-- end comment-content-->
+											</div> <!-- end comment-wrap-->
+					<div class="comment-arrow"></div>
+				</div> <!-- end comment-body-->
+			</div> <!-- end comment-body-->
+		</div> <!-- end comment-body-outer -->
+</li><!-- #comment-## -->
+			</ol>
+				
+					
+				
+												<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title"><span>Leave a Comment</span> <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://www.jarloo.com/c-udp-multicasting-tutorial/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://www.jarloo.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" size="30" aria-required="true" type="text"></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" size="30" aria-required="true" type="text"></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" size="30" type="text"></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a
+ href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; 
+&lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del 
+datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;strike&gt; 
+&lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" id="submit" value="Submit Comment" type="submit">
+							<input name="comment_post_ID" value="296" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+						</p>
+						<p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="0ff5c7e02f" type="hidden"></p><p class="comment-subscription-form"><input name="subscribe_comments" id="subscribe_comments" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" type="checkbox"> <label class="subscribe-label" id="subscribe-label" for="subscribe_comments">Notify me of follow-up comments by email.</label></p><p class="comment-subscription-form"><input name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" type="checkbox"> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog">Notify me of new posts by email.</label></p>					</form>
+							</div><!-- #respond -->
+					
+</div>		</div> 	<!-- end #left-area -->
+
+	<div id="sidebar">
+	<div id="adsensewidget-3" class="widget widget_adsensewidget"><h4 class="title">More you might like</h4>		<div style="overflow: hidden;">
+			<script type="text/javascript"><!--
+google_ad_client = "ca-pub-0246444171295664";
+/* Sidebar Square */
+google_ad_slot = "4077058111";
+google_ad_width = 250;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/show_ads.js">
+</script><ins style="display:inline-table;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:250px;background-color:transparent"><ins id="aswift_1_anchor" style="display:block;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:250px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;" frameborder="0" height="250" scrolling="no" width="250"></iframe></ins></ins>			<div class="clearfix"></div>
+		</div> <!-- end adsense -->
+	</div> <!-- end .widget --><div id="tag_cloud-3" class="widget widget_tag_cloud"><h4 class="title">Tags</h4><div class="tagcloud"><a href="http://www.jarloo.com/tag/net/" class="tag-link-19" title="2 topics" style="font-size: 8pt;">.net</a>
+<a href="http://www.jarloo.com/tag/animation-2/" class="tag-link-22" title="2 topics" style="font-size: 8pt;">animation</a>
+<a href="http://www.jarloo.com/tag/api/" class="tag-link-23" title="15 topics" style="font-size: 14.951724137931pt;">api</a>
+<a href="http://www.jarloo.com/tag/atom/" class="tag-link-25" title="3 topics" style="font-size: 9.1586206896552pt;">atom</a>
+<a href="http://www.jarloo.com/tag/bitmap/" class="tag-link-27" title="2 topics" style="font-size: 8pt;">bitmap</a>
+<a href="http://www.jarloo.com/tag/botting/" class="tag-link-144" title="6 topics" style="font-size: 11.572413793103pt;">botting</a>
+<a href="http://www.jarloo.com/tag/bug/" class="tag-link-28" title="3 topics" style="font-size: 9.1586206896552pt;">bug</a>
+<a href="http://www.jarloo.com/tag/c/" class="tag-link-29" title="63 topics" style="font-size: 20.841379310345pt;">c#</a>
+<a href="http://www.jarloo.com/tag/color/" class="tag-link-31" title="2 topics" style="font-size: 8pt;">color</a>
+<a href="http://www.jarloo.com/tag/conversion/" class="tag-link-33" title="3 topics" style="font-size: 9.1586206896552pt;">conversion</a>
+<a href="http://www.jarloo.com/tag/csharp/" class="tag-link-35" title="84 topics" style="font-size: 22pt;">csharp</a>
+<a href="http://www.jarloo.com/tag/datagrid/" class="tag-link-109" title="2 topics" style="font-size: 8pt;">datagrid</a>
+<a href="http://www.jarloo.com/tag/enum/" class="tag-link-125" title="4 topics" style="font-size: 10.124137931034pt;">enum</a>
+<a href="http://www.jarloo.com/tag/equities/" class="tag-link-106" title="4 topics" style="font-size: 10.124137931034pt;">equities</a>
+<a href="http://www.jarloo.com/tag/excel/" class="tag-link-41" title="2 topics" style="font-size: 8pt;">excel</a>
+<a href="http://www.jarloo.com/tag/exchange/" class="tag-link-42" title="2 topics" style="font-size: 8pt;">exchange</a>
+<a href="http://www.jarloo.com/tag/finance/" class="tag-link-113" title="9 topics" style="font-size: 13.020689655172pt;">finance</a>
+<a href="http://www.jarloo.com/tag/formula/" class="tag-link-44" title="2 topics" style="font-size: 8pt;">formula</a>
+<a href="http://www.jarloo.com/tag/google/" class="tag-link-47" title="4 topics" style="font-size: 10.124137931034pt;">google</a>
+<a href="http://www.jarloo.com/tag/json/" class="tag-link-51" title="2 topics" style="font-size: 8pt;">json</a>
+<a href="http://www.jarloo.com/tag/linq/" class="tag-link-53" title="2 topics" style="font-size: 8pt;">linq</a>
+<a href="http://www.jarloo.com/tag/listbox/" class="tag-link-54" title="2 topics" style="font-size: 8pt;">listbox</a>
+<a href="http://www.jarloo.com/tag/mvvm/" class="tag-link-58" title="4 topics" style="font-size: 10.124137931034pt;">MVVM</a>
+<a href="http://www.jarloo.com/tag/news-2/" class="tag-link-60" title="2 topics" style="font-size: 8pt;">news</a>
+<a href="http://www.jarloo.com/tag/options/" class="tag-link-63" title="2 topics" style="font-size: 8pt;">options</a>
+<a href="http://www.jarloo.com/tag/process/" class="tag-link-66" title="2 topics" style="font-size: 8pt;">process</a>
+<a href="http://www.jarloo.com/tag/rabbitmq/" class="tag-link-68" title="2 topics" style="font-size: 8pt;">rabbitmq</a>
+<a href="http://www.jarloo.com/tag/rdf/" class="tag-link-69" title="3 topics" style="font-size: 9.1586206896552pt;">rdf</a>
+<a href="http://www.jarloo.com/tag/regex/" class="tag-link-70" title="2 topics" style="font-size: 8pt;">regex</a>
+<a href="http://www.jarloo.com/tag/rest/" class="tag-link-107" title="4 topics" style="font-size: 10.124137931034pt;">rest</a>
+<a href="http://www.jarloo.com/tag/rss/" class="tag-link-72" title="3 topics" style="font-size: 9.1586206896552pt;">rss</a>
+<a href="http://www.jarloo.com/tag/serialization/" class="tag-link-73" title="2 topics" style="font-size: 8pt;">serialization</a>
+<a href="http://www.jarloo.com/tag/sound/" class="tag-link-74" title="4 topics" style="font-size: 10.124137931034pt;">sound</a>
+<a href="http://www.jarloo.com/tag/stocks/" class="tag-link-77" title="7 topics" style="font-size: 12.055172413793pt;">stocks</a>
+<a href="http://www.jarloo.com/tag/string/" class="tag-link-128" title="3 topics" style="font-size: 9.1586206896552pt;">string</a>
+<a href="http://www.jarloo.com/tag/thread/" class="tag-link-100" title="2 topics" style="font-size: 8pt;">thread</a>
+<a href="http://www.jarloo.com/tag/visual/" class="tag-link-84" title="2 topics" style="font-size: 8pt;">visual</a>
+<a href="http://www.jarloo.com/tag/visual-studio-2010/" class="tag-link-86" title="5 topics" style="font-size: 10.896551724138pt;">visual studio 2010</a>
+<a href="http://www.jarloo.com/tag/win32/" class="tag-link-141" title="3 topics" style="font-size: 9.1586206896552pt;">win32</a>
+<a href="http://www.jarloo.com/tag/window/" class="tag-link-87" title="2 topics" style="font-size: 8pt;">window</a>
+<a href="http://www.jarloo.com/tag/winforms/" class="tag-link-103" title="3 topics" style="font-size: 9.1586206896552pt;">winforms</a>
+<a href="http://www.jarloo.com/tag/wpf-2/" class="tag-link-88" title="28 topics" style="font-size: 17.462068965517pt;">wpf</a>
+<a href="http://www.jarloo.com/tag/xml/" class="tag-link-90" title="2 topics" style="font-size: 8pt;">xml</a>
+<a href="http://www.jarloo.com/tag/yahoo/" class="tag-link-91" title="5 topics" style="font-size: 10.896551724138pt;">yahoo</a>
+<a href="http://www.jarloo.com/tag/yql/" class="tag-link-94" title="3 topics" style="font-size: 9.1586206896552pt;">yql</a></div>
+</div> <!-- end .widget -->		<div id="recent-posts-3" class="widget widget_recent_entries">		<h4 class="title">Most Recent</h4>		<ul>
+					<li>
+				<a href="http://www.jarloo.com/sojurn-the-tv-app/">Sojurn – The TV App</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/play-sounds-in-wpf-with-playsoundaction-behavior/">Play Sounds in WPF with PlaySoundAction Behavior</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/play-sounds-with-the-soundplayer/">Play Sounds with the SoundPlayer</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/play-sounds-with-mediaelement-in-wpf/">Play Sounds with MediaElement in WPF</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/wpf-combobox-with-groupings/">WPF ComboBox with Groupings</a>
+						</li>
+				</ul>
+		</div> <!-- end .widget --><div id="categories-3" class="widget widget_categories"><h4 class="title">Categories</h4>		<ul>
+	<li class="cat-item cat-item-16"><a href="http://www.jarloo.com/category/code/animation/" title="View all posts filed under Animation">Animation</a> (1)
+</li>
+	<li class="cat-item cat-item-17"><a href="http://www.jarloo.com/category/code/api-code/" title="View all posts filed under API">API</a> (18)
+</li>
+	<li class="cat-item cat-item-145"><a href="http://www.jarloo.com/category/code/botting-code/" title="View all posts filed under Botting">Botting</a> (6)
+</li>
+	<li class="cat-item cat-item-18"><a href="http://www.jarloo.com/category/news/bugs/" title="View all posts filed under Bugs">Bugs</a> (3)
+</li>
+	<li class="cat-item cat-item-3"><a href="http://www.jarloo.com/category/cheat-sheets/" title="View all posts filed under Cheat Sheets">Cheat Sheets</a> (1)
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.jarloo.com/category/code/" title="View all posts filed under Code Snippets">Code Snippets</a> (50)
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.jarloo.com/category/code/database/" title="View all posts filed under Database">Database</a> (2)
+</li>
+	<li class="cat-item cat-item-97"><a href="http://www.jarloo.com/category/featured/" title="View all posts filed under Featured">Featured</a> (8)
+</li>
+	<li class="cat-item cat-item-117"><a href="http://www.jarloo.com/category/code/financial/" title="View all posts filed under Financial">Financial</a> (10)
+</li>
+	<li class="cat-item cat-item-6"><a href="http://www.jarloo.com/category/code/graphics/" title="View all posts filed under Graphics">Graphics</a> (7)
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.jarloo.com/category/code/math/" title="View all posts filed under Math">Math</a> (5)
+</li>
+	<li class="cat-item cat-item-8"><a href="http://www.jarloo.com/category/code/networking/" title="View all posts filed under Networking">Networking</a> (6)
+</li>
+	<li class="cat-item cat-item-10"><a href="http://www.jarloo.com/category/code/projects/" title="View all posts filed under Projects">Projects</a> (7)
+</li>
+	<li class="cat-item cat-item-11"><a href="http://www.jarloo.com/category/code/security/" title="View all posts filed under Security">Security</a> (1)
+</li>
+	<li class="cat-item cat-item-12"><a href="http://www.jarloo.com/category/code/sound-code/" title="View all posts filed under Sound">Sound</a> (4)
+</li>
+	<li class="cat-item cat-item-13"><a href="http://www.jarloo.com/category/tips-tricks/" title="View all posts filed under Tips &amp; Tricks">Tips &amp; Tricks</a> (8)
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.jarloo.com/category/tutorials/" title="View all posts filed under Tutorials">Tutorials</a> (9)
+</li>
+	<li class="cat-item cat-item-15"><a href="http://www.jarloo.com/category/code/wpf/" title="View all posts filed under WPF">WPF</a> (16)
+</li>
+		</ul>
+</div> <!-- end .widget --><div id="random-posts" class="widget widget_rrm_random_posts"><h4 class="title">More you might like</h4><ul><li><a href="http://www.jarloo.com/get-yahoo-finance-api-data-via-yql/" rel="bookmark" title="November 25, 2010">Get Yahoo Finance API Data via YQL</a></li>
+
+<li><a href="http://www.jarloo.com/gradiently-coloring-cells-in-a-wpf-datagrid/" rel="bookmark" title="October 11, 2011">Gradiently Coloring Cells in a WPF DataGrid</a></li>
+
+<li><a href="http://www.jarloo.com/filtering-a-list-in-wpf/" rel="bookmark" title="October 5, 2011">Filtering a List in WPF</a></li>
+
+<li><a href="http://www.jarloo.com/wpf-calendar-control/" rel="bookmark" title="March 14, 2012">An Editable WPF Calendar Control</a></li>
+
+<li><a href="http://www.jarloo.com/play-sounds-in-wpf-with-playsoundaction-behavior/" rel="bookmark" title="June 22, 2012">Play Sounds in WPF with PlaySoundAction Behavior</a></li>
+
+<li><a href="http://www.jarloo.com/calculate-the-name-of-a-financial-option/" rel="bookmark" title="October 13, 2011">Calculate the name of a financial option</a></li>
+
+<li><a href="http://www.jarloo.com/google-finance-and-yql/" rel="bookmark" title="March 5, 2012">Get Stock Data from Google Finance and YQL</a></li>
+
+<li><a href="http://www.jarloo.com/download-stock-symbols/" rel="bookmark" title="March 16, 2012">Download Stock Symbols</a></li>
+</ul><!-- Random Posts took 12.020 ms --></div> <!-- end .widget --><div id="qrcode_widget-3" class="widget qrcode_widget"><h4 class="title">Take this with you</h4><div><img src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/4ed3367608be1fa1a71259ae8dae5ffd.png" alt="qr code"><p>This is optimized to work on your phone. Just scan the code above to bring Jarloo with you.</p></div> <!-- end .widget --></div> <!-- end #sidebar --></div> <!-- end #content-area -->	
+		
+		</div> <!-- end .container -->
+	</div> <!-- end #content -->
+
+	<div id="footer">
+		<div class="container">
+			<div id="footer-widgets" class="clearfix">
+				<div id="text-4" class="footer-widget widget_text"><h4 class="widgettitle">Tips</h4>			<div class="textwidget"><p>I love Bitcoins and Alt-coins. If you found something useful please leave a tip:<br>
+BTC: 1D78KVuRAGUUdWpaYJdoMh3Q6dC29gafqV<br>
+LTC: LZoCzGk5ZiX1RDR68MDwT224p1VKduHUwE</p>
+</div>
+		</div> <!-- end .footer-widget -->		<div id="recent-posts-4" class="footer-widget widget_recent_entries">		<h4 class="widgettitle">Latest Code</h4>		<ul>
+					<li>
+				<a href="http://www.jarloo.com/sojurn-the-tv-app/">Sojurn – The TV App</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/play-sounds-in-wpf-with-playsoundaction-behavior/">Play Sounds in WPF with PlaySoundAction Behavior</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/play-sounds-with-the-soundplayer/">Play Sounds with the SoundPlayer</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/play-sounds-with-mediaelement-in-wpf/">Play Sounds with MediaElement in WPF</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/wpf-combobox-with-groupings/">WPF ComboBox with Groupings</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/webclient-with-timeout-support/">WebClient with Timeout Support</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/webclient-with-certificate-support/">WebClient with Certificate Support</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/serialize-a-dictionary-in-c/">Serialize a Dictionary in C#</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/convert-an-int-or-string-to-an-enum/">Convert an Int or String to an Enum</a>
+						</li>
+					<li>
+				<a href="http://www.jarloo.com/c-case-insensitive-string-compare/">C# Case-Insensitive String Compare</a>
+						</li>
+				</ul>
+		</div> <!-- end .footer-widget --><div id="text-3" class="footer-widget widget_text last"><h4 class="widgettitle">Always more C# code</h4>			<div class="textwidget"><p>
+Thanks for joining us at Jarloo. We keep posting great C# code, WPF 
+tutorials and amazing Visual Studio projects so check back often!
+</p>
+<p>
+Keep watching as we're getting ready to unleash a flood of new WPF 
+tutorials, on everything from the basics of data-binding and using 
+Microsoft Expression Blend to advanced MVVM techniques!
+</p>
+</div>
+		</div><div class="clear"></div> <!-- end .footer-widget --><div id="etsearchwidget-3" class="footer-widget widget_etsearchwidget">			<div id="search-form">
+				<form method="get" id="searchform1" action="http://www.jarloo.com"> 
+					<input value="Search this site..." name="s" id="searchinput" type="text"> 
+					<input src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/search_btn.png" id="searchsubmit" type="image">
+				</form>
+			</div> <!-- end #search-form -->
+</div> <!-- end .footer-widget -->			</div> <!-- end #footer-widgets -->
+
+			<div id="footer-bottom" class="clearfix">
+				<ul id="bottom-nav" class="bottom-nav"><li id="menu-item-615" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-615"><a href="http://localhost/jarloo/">Home</a></li>
+<li id="menu-item-619" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-619"><a href="http://www.jarloo.com/about/sitemap/">Sitemap</a></li>
+<li id="menu-item-616" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-616"><a href="http://www.jarloo.com/about/">About</a></li>
+<li id="menu-item-617" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-617"><a href="http://www.jarloo.com/about/disclaimer/">Disclaimer</a></li>
+<li id="menu-item-618" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-618"><a href="http://www.jarloo.com/about/privacy-policy/">Privacy Policy</a></li>
+</ul>				<p id="copyright">Copyright Vivid Technologies Inc 2011. All Rights Reserved.</p>
+			</div> <!-- end #footer-bottom -->
+		</div> <!-- end .container -->
+	</div> <!-- end #footer -->
+
+	<script src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/jquery_005.js" type="text/javascript"></script>
+<script src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/superfish.js" type="text/javascript"></script>
+<script src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/custom.js" type="text/javascript"></script>		<div style="display:none">
+	<div class="grofile-hash-map-bc23553897b40c591a5fb5761f960d47">
+	</div>
+	<div class="grofile-hash-map-f6c326d7075039abf8fe625c2ffa41ec">
+	</div>
+	<div class="grofile-hash-map-07e8359afdd7526cdedf56cfde29bca5">
+	</div>
+	<div class="grofile-hash-map-c246690cca09a31e9358dfa874a36e86">
+	</div>
+	<div class="grofile-hash-map-15385ff841fdf5647922a22960cd811a">
+	</div>
+	<div class="grofile-hash-map-67163b36ec68dd96800a5e9335e28ffe">
+	</div>
+	<div class="grofile-hash-map-0879c1954a7ee8660f80eafdf9f66776">
+	</div>
+	<div class="grofile-hash-map-23830a9037cb8e435a15c3261038b079">
+	</div>
+	<div class="grofile-hash-map-9a8ea77858853fc2e2765ce10425ec20">
+	</div>
+	<div class="grofile-hash-map-273a3e443df39435705f58d37ed67d88">
+	</div>
+	<div class="grofile-hash-map-2069f919d81a80b482d8bf9af0808893">
+	</div>
+	</div>
+
+	<script type="text/javascript">
+		WPCOM_sharing_counts = {"http:\/\/www.jarloo.com\/c-udp-multicasting-tutorial\/":296}	</script>
+	<div id="sharing_email" style="display: none;">
+		<form action="/c-udp-multicasting-tutorial/" method="post">
+			<label for="target_email">Send to Email Address</label>
+			<input name="target_email" id="target_email" type="email">
+
+			
+				<label for="source_name">Your Name</label>
+				<input name="source_name" id="source_name" type="text">
+
+				<label for="source_email">Your Email Address</label>
+				<input name="source_email" id="source_email" type="email">
+
+			
+			
+			<img style="float: right; display: none" class="loading" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/loading.gif" alt="loading" height="16" width="16">
+			<input value="Send Email" class="sharing_send" type="submit">
+			<a href="#cancel" class="sharing_cancel">Cancel</a>
+
+			<div class="errors errors-1" style="display: none;">
+				Post was not sent - check your email addresses!			</div>
+
+			<div class="errors errors-2" style="display: none;">
+				Email check failed, please try again			</div>
+
+			<div class="errors errors-3" style="display: none;">
+				Sorry, your blog cannot share posts by email.			</div>
+		</form>
+	</div>
+		<script type="text/javascript">
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-facebook' ).on( 'click', function() {
+				window.open( jQuery(this).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+		});
+		</script>
+				<script type="text/javascript">
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-twitter' ).on( 'click', function() {
+				window.open( jQuery(this).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+		});
+		</script>
+				<script type="text/javascript">
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-google-plus-1' ).on( 'click', function() {
+				window.open( jQuery(this).attr( 'href' ), 'wpcomgoogle-plus-1', 'menubar=1,resizable=1,width=480,height=550' );
+				return false;
+			});
+		});
+		</script>
+		<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-5904706-5']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script><script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/shCore.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/shBrushCSharp.js"></script>
+<script type="text/javascript">
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://www.jarloo.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.83c";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "http://www.jarloo.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.83c";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/comment-reply.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var pollsL10n = {"ajax_url":"http:\/\/www.jarloo.com\/wp-admin\/admin-ajax.php","text_wait":"Your last request is still being processed. Please wait a while ...","text_valid":"Please choose a valid poll answer.","text_multiple":"Maximum number of choices allowed: ","show_loading":"1","show_fading":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/polls-js.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/devicepx-jetpack.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/gprofiles.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/wpgroho.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/jquery_002.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/jquery_003.js"></script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/et-ptemplates-frontend.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var recaptcha_options = {"lang":"en"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/sharing.js"></script>
+
+	<script src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/e-201422.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	st_go({v:'ext',j:'1:2.9.3',blog:'17824190',post:'296',tz:'-6'});
+	var load_cmc = function(){linktracker_init(17824190,296,2);};
+	if ( typeof addLoadEvent != 'undefined' ) addLoadEvent(load_cmc);
+	else load_cmc();
+	</script><img id="wpstats" src="C%23%20UDP%20Multicasting%20Tutorial%20_%20Jarloo_pliki/g.gif" alt="">
+
+</div><div id="fancybox-tmp"></div><div id="fancybox-loading"><div></div></div><div id="fancybox-overlay"></div><div id="fancybox-wrap"><div id="fancybox-outer"><div class="fancybox-bg" id="fancybox-bg-n"></div><div class="fancybox-bg" id="fancybox-bg-ne"></div><div class="fancybox-bg" id="fancybox-bg-e"></div><div class="fancybox-bg" id="fancybox-bg-se"></div><div class="fancybox-bg" id="fancybox-bg-s"></div><div class="fancybox-bg" id="fancybox-bg-sw"></div><div class="fancybox-bg" id="fancybox-bg-w"></div><div class="fancybox-bg" id="fancybox-bg-nw"></div><div id="fancybox-content"></div><a id="fancybox-close"></a><div id="fancybox-title"></div><a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a><a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a></div></div><div id="bittip-popup" onclick="bittipCloseIframe()"></div></body></html>

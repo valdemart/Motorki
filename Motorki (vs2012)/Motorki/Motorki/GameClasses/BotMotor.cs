@@ -1,27 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
+using System;
 
-namespace Motorki
+namespace Motorki.GameClasses
 {
     public class BotMotor : Motorek
     {
         public enum BotSophistication { Easy, Normal, Hard };
-        public BotSophistication sophistication;
+        public BotSophistication sophistication { get; set; }
 
         private int[] cmd;
         private int[] cmd_time;
 
-        public BotMotor(Game game, Vector2 position, float rotation, Color motorColor, Color trackColor, Rectangle framingRect)
-            : base(game, position, rotation, motorColor, trackColor, framingRect)
+        public BotMotor(MotorkiGame game, Color motorColor)
+            : base(game, motorColor, new Color(255 - motorColor.R, 255 - motorColor.G, 255 - motorColor.B))
         {
+            int a = MotorkiGame.random.Next(1000);
+            for (int i = 0; i < a * 1000; i++)
+                a = (a + a - a) * a / a;
+
             cmd = new int[2]; //0 - forward/backward, 1 - left/right
             cmd_time = new int[2];
             cmd_time[0] = 0;
@@ -33,8 +29,8 @@ namespace Motorki
         protected override void MindProc(GameTime gameTime)
         {
             float time = gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
-            Random r = new Random();
-
+            float usableSpeed = motorSpeedPerSecond;
+            
             switch (sophistication)
             {
                 case BotSophistication.Easy:
@@ -45,12 +41,13 @@ namespace Motorki
                         {
                             case 0: //go forward
                             case 2:
-                                position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (motorSpeedPerSecond * time);
+                                usableSpeed = motorSpeedPerSecond;
                                 break;
                             case 3: //go backward
-                                position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (-motorSpeedPerSecond * time / 2);
+                                usableSpeed /= 2.0f;
                                 break;
                         }
+                        position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (usableSpeed * time);
                         cmd_time[0] -= gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
@@ -58,9 +55,9 @@ namespace Motorki
                         int last_cmd = cmd[0];
                         do
                         {
-                            cmd[0] = r.Next(0, 3);
+                            cmd[0] = MotorkiGame.random.Next(0, 3);
                         } while (cmd[0] == last_cmd);
-                        cmd_time[0] = r.Next(250, 750);
+                        cmd_time[0] = MotorkiGame.random.Next(250, 750);
                     }
 
                     //resolve left/right command
@@ -84,9 +81,9 @@ namespace Motorki
                         int last_cmd = cmd[1];
                         do
                         {
-                            cmd[1] = r.Next(0, 4);
+                            cmd[1] = MotorkiGame.random.Next(0, 4);
                         } while (cmd[1] == last_cmd);
-                        cmd_time[1] = r.Next(100, 500);
+                        cmd_time[1] = MotorkiGame.random.Next(100, 500);
                     }
                     break;
                 case BotSophistication.Normal:
