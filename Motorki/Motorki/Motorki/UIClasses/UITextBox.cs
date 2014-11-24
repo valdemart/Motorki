@@ -7,6 +7,13 @@ namespace Motorki.UIClasses
 {
     public class UITextBox : UIControl
     {
+        public delegate bool CharacterFilterFunction(char ch);
+
+        /// <summary>
+        /// character filter function should return true if given character is allowed on text box input. otherwise it should return false
+        /// </summary>
+        public CharacterFilterFunction CharacterFilter;
+
         public char PasswordChar { get; set; }
         private int textlengthlimit;
         public int TextLenghtLimit
@@ -73,6 +80,7 @@ namespace Motorki.UIClasses
             : base(game)
         {
             ControlType = UIControlType.UITextBox;
+            CharacterFilter = null;
             Text = "";
             PasswordChar = '\0';
             TextLenghtLimit = -1;
@@ -116,6 +124,8 @@ namespace Motorki.UIClasses
 
                     if ((modifiers & (int)KeyModifiers.Shift) == 0)
                         input_char = (char)(input_char + ('a' - 'A'));
+                    if ((CharacterFilter != null) && (!CharacterFilter(input_char)))
+                        return;
                     if (CursorPos >= Text.Length)
                     {
                         Text += input_char;
@@ -130,6 +140,8 @@ namespace Motorki.UIClasses
                     if ((TextLenghtLimit != -1) && (Text.Length == TextLenghtLimit))
                         return;
 
+                    if ((CharacterFilter != null) && (!CharacterFilter(input_char)))
+                        return;
                     if (CursorPos >= Text.Length)
                     {
                         Text += input_char;

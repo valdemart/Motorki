@@ -5,50 +5,16 @@ legend:
 # - ready for tests
 ? - possibly to do
 
-- VS2012 -> VS2010
-- menus
-	- main menu
-	- new game (complete but some features locked)
-	- bot/paleyrs setup in new game
-	- options (full support except audio settings lock)
-	- sample bikes shifted to menu UI background
-- menu flow processor
-- UIClasses
-	- proper TextLengthLimit in UITextBox
-	- UITaggedValue support for UIComboBox, UIComboListBox and UIListBox
-	- UIImage
-	- UIKeyPicker
-	- UIProgress
-	- UIParent ESC hook
-	- small bug-fixes
-	! font property made single-writable but possible to clear using "set null -> set destination"
-- InputEvents deregister
-- textures
-	- menu logos
-	- update in common
-- set initial graph mode to first accessible or the one saved in settings.xml
-	- drawing to rendertarget and scaling to current window/screen size
-- changed layerDepth to int - use of multiple rendertargets instead of filtering by depth
-- MotorTrace classes (yet without collisions)
-- bikes
-	- force forward movement (brakes in relative steering)
-	- repaired bot randomization
-	- speed decrease -> bonus *1.5, brake *0.5
-	- bike pointers and names
-	- sample bug-fixes
 - game
-	- map format (paper version documentation, implemented)
-	- game types (implemented)
-	- proper camera usage
-	- map collisions
-	- bike/trace and bike/bike collisions (experimental but works)
-		- some fixes -> maybe will stay
-	- respawns (immediate only - should be over time and giving some immortality period)
-	- map crate fix
-	- changed to gameMotorsTable
-	- added support for MaxPlayers map property
-- networking
-	- basic udp communication classes
+	- team deathmatch available (another locked due to no testing but it should be ok to just unlock them)
+- gameplay
+	- bugfix: frags/point counters now working correctly during collisions
+	- bugfix: frags/point counters now working correctly for all frags/points changes
+	- respawning algorithm corrected for team games
+	- frags/points counters text changed
+- UIClasses
+	- UITextBox now has character filtering routine available (UITextBox.CharacterFilter)
+		! character filtering is not used during programmatic text changes - set text programmatically to the correct text before allowing user actions
 
 todo:
 + connecting
@@ -57,6 +23,7 @@ todo:
 	+ notify map loading progress to loading screen
 	+ drawing to split screen part (to be done when GamePlayScreen will be available)
 	# test what will happen if many motors spawn at the same place&time
+	+ more maps
 + minimap
 + textures
 	+ bonus textures
@@ -71,7 +38,6 @@ todo:
 	+ New game - push to Loading screen
 	+ game play init: split screen and two player support
 + game
-	! error: frag counter in deathmatch is not changing
 	+ unlock team game modes
 	* GamePlay class (game progress processor; also network client)
 	+ bonus storage (map contains bonus accessibility for game; server generates bonusses)
@@ -90,8 +56,13 @@ todo:
 ? UI: anchors
 <engineer>
 + bots
-	+ bot menu
 	+ bot sophistication normal/hard
-	+ bot sophistication for new game (in other settings? rather in new game directly)
-+ map
-	+ more maps
+	+ bot sophistication controls in new game screen
+	+ connect in GamePlay game initialization routines (need additional GameSettings field)
+	+ in higher sophistication MindProc routines need to delegate GameTime information to the BotAgent routines
+		? isn't it just much worthy to throw easy mode also on the agent system?
+	+ (different point of view) BotSystem class as part of GamePlay (higher level than BotMotor)
+		! allows to start system separately from starting/registering agents
+	! need some agent description format
+	! need some tactics for bots (defensive, offensive, cooperatively offensive)
+		! need some communication for bots to use during cooperatives

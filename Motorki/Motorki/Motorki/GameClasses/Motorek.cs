@@ -11,8 +11,8 @@ namespace Motorki.GameClasses
 
     public abstract class Motorek
     {
-        public const float motorSpeedPerSecond = 300.0f; //units (pixels?) per second (*1.5 during bonus)
-        public const float motorTurnPerSecond = 360.0f; //degrees per second
+        public float motorSpeedPerSecond = 300.0f; //units (pixels?) per second (*1.5 during bonus)
+        public float motorTurnPerSecond = 360.0f; //degrees per second
 
         //internals
         protected MotorkiGame game;

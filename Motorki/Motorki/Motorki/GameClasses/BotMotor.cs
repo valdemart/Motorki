@@ -11,7 +11,7 @@ namespace Motorki.GameClasses
         private int[] cmd;
         private int[] cmd_time;
 
-        public BotMotor(MotorkiGame game, Color motorColor)
+        public BotMotor(MotorkiGame game, Color motorColor, BotSophistication sophistication = BotSophistication.Easy)
             : base(game, motorColor, new Color(255 - motorColor.R, 255 - motorColor.G, 255 - motorColor.B))
         {
             int a = MotorkiGame.random.Next(1000);
@@ -23,7 +23,7 @@ namespace Motorki.GameClasses
             cmd_time[0] = 0;
             cmd_time[1] = 0;
 
-            sophistication = BotSophistication.Easy;
+            this.sophistication = sophistication;
         }
 
         protected override void MindProc(GameTime gameTime)

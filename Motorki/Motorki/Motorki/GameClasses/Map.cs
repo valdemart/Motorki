@@ -489,54 +489,42 @@ namespace Motorki.GameClasses
             if (SpawnPoints.Count == 0)
                 return false;
 
-            int count = 0;
-            for (int i = 0; i < SpawnInUse.Count; i++)
-                if (SpawnInUse[i])
-                    count++;
-            if (count == SpawnInUse.Count)
-                for (int i = 0; i < SpawnInUse.Count; i++)
-                    SpawnInUse[i] = false;
-
+            List<int> SpawnIDsAllowedToUse = new List<int>();
             if (team == -1)
             {
-                int spawnID;
-                do
-                {
-                    spawnID = MotorkiGame.random.Next() % SpawnPoints.Count;
-                } while (SpawnInUse[spawnID]);
-                position = SpawnPoints[spawnID].Coords;
-                rotation = SpawnPoints[spawnID].Rotation;
-                SpawnInUse[spawnID] = true;
-                return true;
+                for (int i = 0; i < SpawnPoints.Count; i++)
+                    SpawnIDsAllowedToUse.Add(i);
             }
             else
             {
-                //var spawns = from sp in SpawnPoints
-                //             where sp.Team == team
-                //             select sp;
-                List<MapSpawnPoint> spawns = new List<MapSpawnPoint>();
                 for (int i = 0; i < SpawnPoints.Count; i++)
-                    if (!SpawnInUse[i] && (SpawnPoints[i].Team == team))
-                        spawns.Add(SpawnPoints[i]);
-                if (spawns.Count() > 0)
-                {
-                    int spawnID = MotorkiGame.random.Next() % spawns.Count();
-                    foreach (var sp in spawns)
-                    {
-                        if (spawnID == 0)
-                        {
-                            position = sp.Coords;
-                            rotation = sp.Rotation;
-                            SpawnInUse[SpawnPoints.IndexOf(sp)] = true;
-                            return true;
-                        }
-                        else
-                            spawnID--;
-                    }
-                }
+                    if (SpawnPoints[i].Team == team)
+                        SpawnIDsAllowedToUse.Add(i);
             }
 
-            return false;
+            //check spawn reusal condition (allows to at least partially reduce spawn collisions)
+            int count = 0;
+            for (int i = 0; i < SpawnInUse.Count; i++) //for all spawns...
+                if (SpawnIDsAllowedToUse.Contains(i) && SpawnInUse[i]) //...check is this spawn available to use for this particular team case...
+                    count++; //...and count it in if it's already used
+            if (count == SpawnInUse.Where((siu, siu_id) => SpawnIDsAllowedToUse.Contains(siu_id)).Count()) //if all spawns available for this particular team case are used...
+                for (int i = 0; i < SpawnInUse.Count; i++) //...then for all spawns...
+                    if(SpawnIDsAllowedToUse.Contains(i)) //...if this spawn is available for this particular team case...
+                        SpawnInUse[i] = false; //...enable spawn for use
+
+            //get actual spawn ID from allowed, not used spawns
+            int spawnID;
+            do
+            {
+                spawnID = MotorkiGame.random.Next() % SpawnIDsAllowedToUse.Count;
+            } while (SpawnInUse[SpawnIDsAllowedToUse[spawnID]]);
+            spawnID = SpawnIDsAllowedToUse[spawnID];
+
+            //get spawn data and mark it as used
+            position = SpawnPoints[spawnID].Coords;
+            rotation = SpawnPoints[spawnID].Rotation;
+            SpawnInUse[spawnID] = true;
+            return true;
         }
 
         public static List<UITaggedValue> EnumerateMaps(GameType gameType)

@@ -8,7 +8,7 @@ using System.Text;
 namespace Motorki.GameClasses
 {
     /// <summary>
-    /// local game controller for bvoth players (currently only single player supported)
+    /// local game controller for both players (currently only single player supported)
     /// </summary>
     public class GamePlay
     {
@@ -134,7 +134,7 @@ namespace Motorki.GameClasses
                 {
                     Vector2 pos;
                     float rot;
-                    if(!GameSettings.gameMap.GetBikeSpawnData((team_game?i/5:-1), out pos, out rot))
+                    if (!GameSettings.gameMap.GetBikeSpawnData((team_game ? i / 5 : -1), out pos, out rot))
                         throw new Exception("No spawn point found!!");
                     GameSettings.gameMotors[i].LoadAndInitialize(new Rectangle(0, 0, (int)GameSettings.gameMap.Parameters.Size.X, (int)GameSettings.gameMap.Parameters.Size.Y));
                     GameSettings.gameMotors[i].Spawn(pos, rot);
@@ -161,7 +161,7 @@ namespace Motorki.GameClasses
         private bool DeathMatchWinning()
         {
             //check stick bike for winning conditions
-            if (GameSettings.gameMotors[cameraStickBikeID].FragsCount == GameSettings.gameFragLimit)
+            if (GameSettings.gameMotors[cameraStickBikeID].FragsCount >= GameSettings.gameFragLimit)
                 return true;
             return false;
         }
@@ -170,7 +170,7 @@ namespace Motorki.GameClasses
         {
             //check stick bike for losing conditions
             for (int i = 0; i < GameSettings.gameMotors.Length; i++)
-                if ((GameSettings.gameMotors[i] != null) && (i != cameraStickBikeID) && (GameSettings.gameMotors[i].FragsCount == GameSettings.gameFragLimit))
+                if ((GameSettings.gameMotors[i] != null) && (i != cameraStickBikeID) && (GameSettings.gameMotors[i].FragsCount >= GameSettings.gameFragLimit))
                     return true;
             return false;
         }
@@ -192,7 +192,7 @@ namespace Motorki.GameClasses
         private bool DemolitionLosing()
         {
             //check stick bike for losing conditions
-            if (GameSettings.gameMotors[cameraStickBikeID].HP == 0)
+            if (GameSettings.gameMotors[cameraStickBikeID].HP <= 0)
                 return true;
             return false;
         }
@@ -200,7 +200,7 @@ namespace Motorki.GameClasses
         private bool PointMatchWinning()
         {
             //check stick bike for winning conditions
-            if (GameSettings.gameMotors[cameraStickBikeID].PointsCount == GameSettings.gamePointLimit)
+            if (GameSettings.gameMotors[cameraStickBikeID].PointsCount >= GameSettings.gamePointLimit)
                 return true;
             return false;
         }
@@ -209,7 +209,7 @@ namespace Motorki.GameClasses
         {
             //check stick bike for losing conditions
             for (int i = 0; i < GameSettings.gameMotors.Length; i++)
-                if ((GameSettings.gameMotors[i] != null) && (i != cameraStickBikeID) && (GameSettings.gameMotors[i].PointsCount == GameSettings.gamePointLimit))
+                if ((GameSettings.gameMotors[i] != null) && (i != cameraStickBikeID) && (GameSettings.gameMotors[i].PointsCount >= GameSettings.gamePointLimit))
                     return true;
             return false;
         }
@@ -483,9 +483,9 @@ namespace Motorki.GameClasses
                                         GameSettings.gameMotors[j].position += dispVecB;
                                         GameSettings.gameMotors[j].rotation = rotB;
                                         //add points and frags
-                                        if (GameSettings.gameMotors[i].HP == 0)
-                                            GameSettings.gameMotors[j].FragsCount += 1;
-                                        GameSettings.gameMotors[j].PointsCount += (int)(dmgA * 10);
+                                        if (GameSettings.gameMotors[j].HP == 0)
+                                            GameSettings.gameMotors[i].FragsCount += 1;
+                                        GameSettings.gameMotors[i].PointsCount += (int)(dmgB * 10);
                                     }
                                     GameSettings.gameMotors[i].RefreshBoundingPoints();
                                     GameSettings.gameMotors[j].RefreshBoundingPoints();

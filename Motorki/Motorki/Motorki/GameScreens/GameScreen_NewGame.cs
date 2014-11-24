@@ -118,8 +118,8 @@ namespace Motorki.GameScreens
                                     ((UIComboBox)UIParent.UI["cboxMapName"]).SelectedIndex = 0;
                                     break;
                                 case GameType.TeamDeathMatch:
-                                    UIParent.UI["btnProceedGame"].Enabled = false;
-                                    UIParent.UI["labelGameDescription"].Text = "(locked) Destroy specified number of bikes from opposite team";
+                                    UIParent.UI["btnProceedGame"].Enabled = true;
+                                    UIParent.UI["labelGameDescription"].Text = "Destroy specified number of bikes from opposite team";
                                     UIParent.UI["tboxFragLimit"].Enabled = true;
                                     UIParent.UI["tboxPointLimit"].Enabled = false;
                                     UIParent.UI["tboxTimeLimit"].Enabled = false;
@@ -197,8 +197,12 @@ namespace Motorki.GameScreens
                         textbox.Name = "tboxFragLimit";
                         textbox.Enabled = false;
                         textbox.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, label.PositionAndSize.Top - 5, 100, 0);
-                        textbox.Text = "" + GameSettings.gameFragLimit;
                         textbox.TextLenghtLimit = 3;
+                        textbox.CharacterFilter = (UITextBox.CharacterFilterFunction)((ch) =>
+                        {
+                            return (ch >= '0') && (ch <= '9');
+                        });
+                        textbox.Text = "" + GameSettings.gameFragLimit;
                         UIParent.UI.Add(textbox);
 
                         label = new UILabel(game);
@@ -211,8 +215,12 @@ namespace Motorki.GameScreens
                         textbox.Name = "tboxPointLimit";
                         textbox.Enabled = false;
                         textbox.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, label.PositionAndSize.Top - 5, 100, 0);
+                        textbox.TextLenghtLimit = 6;
+                        textbox.CharacterFilter = (UITextBox.CharacterFilterFunction)((ch) =>
+                        {
+                            return (ch >= '0') && (ch <= '9');
+                        });
                         textbox.Text = "" + GameSettings.gamePointLimit;
-                        textbox.TextLenghtLimit = 3;
                         UIParent.UI.Add(textbox);
 
                         label = new UILabel(game);
@@ -225,8 +233,12 @@ namespace Motorki.GameScreens
                         textbox.Name = "tboxTimeLimit";
                         textbox.Enabled = false;
                         textbox.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, label.PositionAndSize.Top - 5, 100, 0);
-                        textbox.Text = "" + GameSettings.gameTimeLimit;
                         textbox.TextLenghtLimit = 3;
+                        textbox.CharacterFilter = (UITextBox.CharacterFilterFunction)((ch) =>
+                        {
+                            return (ch >= '0') && (ch <= '9');
+                        });
+                        textbox.Text = "" + GameSettings.gameTimeLimit;
                         UIParent.UI.Add(textbox);
 
                         check = new UICheckBox(game);
@@ -397,7 +409,7 @@ namespace Motorki.GameScreens
                             //save changes
                             for(int i=0; i<5; i++)
                             {
-                                switch(UIParent.UI["t1m"+(i+1)+"Type"].Text)
+                                switch (UIParent.UI["t1m" + (i + 1) + "Type"].Text)
                                 {
                                     case "None":
                                         GameSettings.gameSlots[i] = null;
