@@ -15,6 +15,11 @@ legend:
 - UIClasses
 	- UITextBox now has character filtering routine available (UITextBox.CharacterFilter)
 		! character filtering is not used during programmatic text changes - set text programmatically to the correct text before allowing user actions
+- Motor subclasses
+	- changed motor controling mechanism (from position/rotation to ctrlBrakes/ctrlDirection)
+- bots
+	- AgentController, Agent and AgentMessage classes
+	- BotAgent and BotAgentMessage classes started
 
 todo:
 + connecting
@@ -66,3 +71,6 @@ todo:
 	! need some agent description format
 	! need some tactics for bots (defensive, offensive, cooperatively offensive)
 		! need some communication for bots to use during cooperatives
++ UIClasses
+	+ event cancellation through event.GetInvokationList()
++ poczytac: SESAM (materia³y wprowadzajace od tego i zajrzec w kod)

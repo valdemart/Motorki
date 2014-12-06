@@ -1,13 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace Motorki.GameClasses
 {
@@ -36,14 +28,14 @@ namespace Motorki.GameClasses
                     switch (GameSettings.player1Steering)
                     {
                         case Steering.Relative:
+                            ctrlDirection = 0;
                             if (InputEvents.IsKeyPressed(GameSettings.player1Keys[0])) //rotate left
-                                rotation = (rotation - motorTurnPerSecond * time) % 360;
+                                ctrlDirection += -1;
                             if (InputEvents.IsKeyPressed(GameSettings.player1Keys[1])) //rotate right
-                                rotation = (rotation + motorTurnPerSecond * time) % 360;
+                                ctrlDirection += 1;
+                            ctrlBrakes = false;
                             if (InputEvents.IsKeyPressed(GameSettings.player1Keys[3]))
-                                usableSpeed /= 2.0f;
-                            //unconditional forward
-                            position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (usableSpeed * time);
+                                ctrlBrakes = true;
                             break;
                         case Steering.Absolute:
                             Vector2 current_direction = new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)));
@@ -62,8 +54,8 @@ namespace Motorki.GameClasses
                             new_direction = new Vector2(new_direction.Y, -new_direction.X);
                             float sin_alpha = Vector2.Dot(new_direction, current_direction); //perpendicular dot product
                             float angle = MathHelper.ToDegrees((float)Math.Asin(sin_alpha));
-                            rotation += Math.Sign(angle) * motorTurnPerSecond * time;
-                            position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (motorSpeedPerSecond * time);
+                            ctrlBrakes = false;
+                            ctrlDirection = (angle > 0 ? 1 : (angle < 0 ? -1 : 0));
                             break;
                     }
                     break;
@@ -71,14 +63,14 @@ namespace Motorki.GameClasses
                     switch (GameSettings.player2Steering)
                     {
                         case Steering.Relative:
+                            ctrlDirection = 0;
                             if (InputEvents.IsKeyPressed(GameSettings.player2Keys[0])) //rotate left
-                                rotation = (rotation - motorTurnPerSecond * time) % 360;
+                                ctrlDirection += -1;
                             if (InputEvents.IsKeyPressed(GameSettings.player2Keys[1])) //rotate right
-                                rotation = (rotation + motorTurnPerSecond * time) % 360;
+                                ctrlDirection += 1;
+                            ctrlBrakes = false;
                             if (InputEvents.IsKeyPressed(GameSettings.player2Keys[3]))
-                                usableSpeed /= 2.0f;
-                            //unconditional forward
-                            position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (usableSpeed * time);
+                                ctrlBrakes = true;
                             break;
                         case Steering.Absolute:
                             Vector2 current_direction = new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)));
@@ -97,8 +89,8 @@ namespace Motorki.GameClasses
                             new_direction = new Vector2(new_direction.Y, -new_direction.X);
                             float sin_alpha = Vector2.Dot(new_direction, current_direction); //perpendicular dot product
                             float angle = MathHelper.ToDegrees((float)Math.Asin(sin_alpha));
-                            rotation += Math.Sign(angle) * motorTurnPerSecond * time;
-                            position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (motorSpeedPerSecond * time);
+                            ctrlBrakes = false;
+                            ctrlDirection = (angle > 0 ? 1 : (angle < 0 ? -1 : 0));
                             break;
                     }
                     break;

@@ -56,7 +56,7 @@ namespace Motorki.GameScreens
             label.AutoSize = true;
             label.PositionAndSize = new Rectangle(0, 0, 0, 0);
             label.Text = GameSettings.gameMotors[motorID].name;
-            label.fontColor = Color.Red;
+            label.fontColor = motorID >= 5 ? Color.Blue : Color.Red;
             UIParent.UI.Add(label);
 
             //teammates hp bars and names
@@ -78,7 +78,7 @@ namespace Motorki.GameScreens
             label.AutoSize = true;
             label.PositionAndSize = new Rectangle(0, height - counter_height - 2, 0, 0);
             label.Text = "";
-            label.fontColor = Color.Red;
+            label.fontColor = motorID >= 5 ? Color.Blue : Color.Red;
             UIParent.UI.Add(label);
             for (int i = 0; i < GameSettings.gameMotors.Length; i++)
                 if (GameSettings.gameMotors[i] != null)
@@ -147,11 +147,11 @@ namespace Motorki.GameScreens
             switch (GameSettings.gameType)
             {
                 case GameType.DeathMatch: new_text = GameSettings.gameMotors[motorID].FragsCount.ToString("000") + "/" + GameSettings.gameFragLimit.ToString("000") + (leader_frags > 0 ? " (you are leading by +" + leader_frags + ")" : leader_frags == 0 ? " (tie)" : " (you are losing by " + leader_frags + ")"); break;
-                case GameType.Demolition: new_text = aliveBikesCount.ToString("00") + "/" + bikesCount.ToString("00"); break;
+                case GameType.Demolition: new_text = aliveBikesCount.ToString("00") + " of " + bikesCount.ToString("00") + " alive"; break;
                 case GameType.PointMatch: new_text = GameSettings.gameMotors[motorID].PointsCount.ToString("000000") + "/" + GameSettings.gamePointLimit.ToString("000000") + (leader_points > 0 ? " (you are leading by +" + leader_points + ")" : leader_points == 0 ? " (tie)" : " (you are losing by " + leader_points + ")"); break;
                 case GameType.TimeMatch: new_text = (time_left / 60).ToString("00") + ":" + (time_left % 60).ToString("00") + (leader_points > 0 ? " (you are leading by +" + leader_points + " points)" : leader_points == 0 ? " (tie)" : " (you are losing by " + leader_points + " points)"); break;
                 case GameType.TeamDeathMatch: new_text = teamFragsCount.ToString("000") + " [" + GameSettings.gameMotors[motorID].FragsCount.ToString("000") + " yours]/" + GameSettings.gameFragLimit.ToString("000") + (team_leader_frags > 0 ? " (your team is leading with +" + team_leader_frags + ")" : team_leader_frags == 0 ? " (tie)" : " (your team is losing with " + team_leader_frags + ")"); break;
-                case GameType.TeamDemolition: new_text = teamMembersCount.ToString("0") + " - " + enemyTeamMembersCount.ToString("0") + (teamMembersCount > enemyTeamMembersCount ? " (your team is leading)" : teamMembersCount == enemyTeamMembersCount ? " (tie)" : " (your team is losing)"); break;
+                case GameType.TeamDemolition: new_text = teamMembersCount.ToString("0") + " alive - " + enemyTeamMembersCount.ToString("0") + " alive" + (teamMembersCount > enemyTeamMembersCount ? " (your team is leading)" : teamMembersCount == enemyTeamMembersCount ? " (tie)" : " (your team is losing)"); break;
                 case GameType.TeamPointMatch: new_text = teamPointsCount.ToString("000000") + " [" + GameSettings.gameMotors[motorID].PointsCount.ToString("000000") + " yours]/" + GameSettings.gamePointLimit.ToString("000000") + (team_leader_points > 0 ? " (your team is leading by +" + team_leader_points + ")" : team_leader_points == 0 ? " (tie)" : " (your team is losing by " + team_leader_points + ")"); break;
                 case GameType.TeamTimeMatch: new_text = (time_left / 60).ToString("00") + ":" + (time_left % 60).ToString("00") + (team_leader_points > 0 ? " (your team is leading by +" + team_leader_points + " points)" : team_leader_points == 0 ? " (tie)" : " (your team is losing by " + team_leader_points + " points)"); break;
             }

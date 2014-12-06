@@ -43,8 +43,47 @@ namespace Motorki
         Alt = LeftAlt | RightAlt
     }
 
+    /*public class IE_CancellableEventArgs
+    {
+        /// <summary>
+        /// if set to true, ends event processing
+        /// </summary>
+        public bool Handled { get; set; }
+
+        public IE_CancellableEventArgs()
+        {
+            Handled = false;
+        }
+    }
+
+    public class IE_KeyboardEventArgs : IE_CancellableEventArgs
+    {
+        public Keys key { get; private set; }
+        public bool state { get; private set; }
+        public int modifiers { get; private set; }
+
+        public IE_KeyboardEventArgs(Keys key, bool state, int modifiers)
+        {
+            this.key = key;
+            this.state = state;
+            this.modifiers = modifiers;
+        }
+    }
+
+    public class IE_MouseEventArgs : IE_CancellableEventArgs
+    {
+        public MouseData md { get; private set; }
+
+        public IE_MouseEventArgs(MouseData md)
+        {
+            this.md = md;
+        }
+    }*/
+
     public delegate void KeyboardEvent(Keys key, bool state, int modifiers);
     public delegate void MouseEvent(MouseData md);
+    //public delegate void _KeyboardEvent(IE_KeyboardEventArgs args);
+    //public delegate void _MouseEvent(IE_MouseEventArgs args);
 
     public class InputEvents : Microsoft.Xna.Framework.GameComponent
     {
@@ -118,6 +157,7 @@ namespace Motorki
                             keypress_times[i] -= key_repeat;
                             if (KeyRepeated != null)
                                 KeyRepeated((Keys)Enum.Parse(typeof(Keys), key_names[i]), true, modifiers);
+                            //RiseCancellableEvent(KeyRepeated, new IE_KeyboardEventArgs((Keys)Enum.Parse(typeof(Keys), key_names[i]), true, modifiers));
                         }
                     }
                     else
@@ -126,6 +166,7 @@ namespace Motorki
                         keypress_times[i] = 0;
                         if (KeyReleased != null)
                             KeyReleased((Keys)Enum.Parse(typeof(Keys), key_names[i]), false, modifiers);
+                        //RiseCancellableEvent(KeyReleased, new IE_KeyboardEventArgs((Keys)Enum.Parse(typeof(Keys), key_names[i]), false, modifiers));
                     }
                 }
                 else if (keys.Contains((Keys)Enum.Parse(typeof(Keys), key_names[i])))
@@ -133,6 +174,7 @@ namespace Motorki
                     keypress_times[i] += gameTime.ElapsedGameTime.Milliseconds;
                     if (KeyPressed != null)
                         KeyPressed((Keys)Enum.Parse(typeof(Keys), key_names[i]), true, modifiers);
+                    //RiseCancellableEvent(KeyPressed, new IE_KeyboardEventArgs((Keys)Enum.Parse(typeof(Keys), key_names[i]), true, modifiers));
                 }
             }
 
@@ -146,11 +188,13 @@ namespace Motorki
             {
                 if (MouseMoved != null)
                     MouseMoved(md);
+                //RiseCancellableEvent(MouseMoved, new IE_MouseEventArgs(md));
             }
             if ((mbtnLeft != 0) != md.Left)
             {
                 if (MouseLeftChanged != null)
                     MouseLeftChanged(md);
+                //RiseCancellableEvent(MouseLeftChanged, new IE_MouseEventArgs(md));
                 if (!md.Left)
                     mbtnLeft = 0;
                 else
@@ -165,6 +209,7 @@ namespace Motorki
                     {
                         if (MouseLeftRepeat != null)
                             MouseLeftRepeat(md);
+                        //RiseCancellableEvent(MouseLeftRepeat, new IE_MouseEventArgs(md));
                         mbtnLeft -= mousekey_repeat;
                     }
                 }
@@ -173,6 +218,7 @@ namespace Motorki
             {
                 if (MouseRightChanged != null)
                     MouseRightChanged(md);
+                //RiseCancellableEvent(MouseRightChanged, new IE_MouseEventArgs(md));
                 if (!md.Right)
                     mbtnRight = 0;
                 else
@@ -187,6 +233,7 @@ namespace Motorki
                     {
                         if (MouseRightRepeat != null)
                             MouseRightRepeat(md);
+                        //RiseCancellableEvent(MouseRightRepeat, new IE_MouseEventArgs(md));
                         mbtnRight -= mousekey_repeat;
                     }
                 }
@@ -195,6 +242,7 @@ namespace Motorki
             {
                 if (MouseCenterChanged != null)
                     MouseCenterChanged(md);
+                //RiseCancellableEvent(MouseCenterChanged, new IE_MouseEventArgs(md));
                 if (!md.Center)
                     mbtnCenter = 0;
                 else
@@ -209,6 +257,7 @@ namespace Motorki
                     {
                         if (MouseCenterRepeat != null)
                             MouseCenterRepeat(md);
+                        //RiseCancellableEvent(MouseCenterRepeat, new IE_MouseEventArgs(md));
                         mbtnCenter -= mousekey_repeat;
                     }
                 }
@@ -228,5 +277,18 @@ namespace Motorki
         public static event MouseEvent MouseLeftRepeat;
         public static event MouseEvent MouseRightRepeat;
         public static event MouseEvent MouseCenterRepeat;
+
+        /*private void RiseCancellableEvent(Delegate evt, IE_CancellableEventArgs args)
+        {
+            Delegate[] inv_list = evt.GetInvocationList();
+            if (inv_list.Length == 0)
+                return;
+            for (int i = 0; i < inv_list.Length; i++)
+            {
+                inv_list[i].Method.Invoke(this, new object[] { args });
+                if (args.Handled)
+                    return;
+            }
+        }*/
     }
 }

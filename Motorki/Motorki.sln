@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motorki", "Motorki\Motorki\Motorki.csproj", "{64D3E31A-FB22-454D-8ACC-A295F5D20DBA}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MotorkiContent", "Motorki\MotorkiContent\MotorkiContent.contentproj", "{BDEAAAA7-67FB-4A1C-8E75-A1D029E0CD5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorkiContent", "Motorki\MotorkiContent\MotorkiContent.contentproj", "{BDEAAAA7-67FB-4A1C-8E75-A1D029E0CD5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "event processing", "event processing\event processing.csproj", "{AD4F6424-DEDA-4D45-BF1F-9AC4E3ED06CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{64D3E31A-FB22-454D-8ACC-A295F5D20DBA}.Release|x86.Build.0 = Release|x86
 		{BDEAAAA7-67FB-4A1C-8E75-A1D029E0CD5A}.Debug|x86.ActiveCfg = Debug|x86
 		{BDEAAAA7-67FB-4A1C-8E75-A1D029E0CD5A}.Release|x86.ActiveCfg = Release|x86
+		{AD4F6424-DEDA-4D45-BF1F-9AC4E3ED06CD}.Debug|x86.ActiveCfg = Debug|x86
+		{AD4F6424-DEDA-4D45-BF1F-9AC4E3ED06CD}.Debug|x86.Build.0 = Debug|x86
+		{AD4F6424-DEDA-4D45-BF1F-9AC4E3ED06CD}.Release|x86.ActiveCfg = Release|x86
+		{AD4F6424-DEDA-4D45-BF1F-9AC4E3ED06CD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

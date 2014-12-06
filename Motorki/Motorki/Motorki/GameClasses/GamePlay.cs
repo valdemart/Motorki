@@ -360,7 +360,7 @@ namespace Motorki.GameClasses
             {
                 //update motors
                 for (int i = 0; i < GameSettings.gameMotors.Length; i++)
-                    if ((GameSettings.gameMotors[i] != null) && (GameSettings.gameMotors[i].HP > 0))
+                    if (GameSettings.gameMotors[i] != null)
                         GameSettings.gameMotors[i].Update(gameTime);
 
                 //do some game type research

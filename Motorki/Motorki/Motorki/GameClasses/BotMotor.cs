@@ -1,5 +1,5 @@
-using Microsoft.Xna.Framework;
 using System;
+using Microsoft.Xna.Framework;
 
 namespace Motorki.GameClasses
 {
@@ -18,7 +18,7 @@ namespace Motorki.GameClasses
             for (int i = 0; i < a * 1000; i++)
                 a = (a + a - a) * a / a;
 
-            cmd = new int[2]; //0 - forward/backward, 1 - left/right
+            cmd = new int[2]; //0 - brakes active/inactive, 1 - forward/left/right
             cmd_time = new int[2];
             cmd_time[0] = 0;
             cmd_time[1] = 0;
@@ -28,63 +28,30 @@ namespace Motorki.GameClasses
 
         protected override void MindProc(GameTime gameTime)
         {
-            float time = gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
-            float usableSpeed = motorSpeedPerSecond;
-            
             switch (sophistication)
             {
                 case BotSophistication.Easy:
-                    //resolve forward/backward command
-                    if (cmd_time[0] > 0)
+                    //generate brakes active/inactive command
+                    if (cmd_time[0] <= 0)
                     {
-                        switch (cmd[0])
-                        {
-                            case 0: //go forward
-                            case 2:
-                                usableSpeed = motorSpeedPerSecond;
-                                break;
-                            case 3: //go backward
-                                usableSpeed /= 2.0f;
-                                break;
-                        }
-                        position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (usableSpeed * time);
-                        cmd_time[0] -= gameTime.ElapsedGameTime.Milliseconds;
-                    }
-                    else
-                    {
-                        int last_cmd = cmd[0];
-                        do
-                        {
-                            cmd[0] = MotorkiGame.random.Next(0, 3);
-                        } while (cmd[0] == last_cmd);
+                        //0.2 of chance for activating brakes
+                        cmd[0] = MotorkiGame.random.Next(0, 15) % 5 > 0 ? 0 : 1;
                         cmd_time[0] = MotorkiGame.random.Next(250, 750);
                     }
+                    //resolve brakes active/inactive command
+                    ctrlBrakes = cmd[0] == 1;
+                    cmd_time[0] -= gameTime.ElapsedGameTime.Milliseconds;
 
-                    //resolve left/right command
-                    if (cmd_time[1] > 0)
+                    //generate forward/left/right command
+                    if (cmd_time[1] <= 0)
                     {
-                        switch (cmd[1])
-                        {
-                            case 1: //rotate left
-                            case 4:
-                                rotation = (rotation - motorTurnPerSecond * time) % 360;
-                                break;
-                            case 0:
-                            case 3: //rotate right
-                                rotation = (rotation + motorTurnPerSecond * time) % 360;
-                                break;
-                        }
-                        cmd_time[1] -= gameTime.ElapsedGameTime.Milliseconds;
-                    }
-                    else
-                    {
-                        int last_cmd = cmd[1];
-                        do
-                        {
-                            cmd[1] = MotorkiGame.random.Next(0, 4);
-                        } while (cmd[1] == last_cmd);
+                        //(1/3) of chance for going forward, left or right
+                        cmd[1] = MotorkiGame.random.Next(0, 12) % 3 - 1;
                         cmd_time[1] = MotorkiGame.random.Next(100, 500);
                     }
+                    //resolve forward/left/right command
+                    ctrlDirection = cmd[1];
+                    cmd_time[1] -= gameTime.ElapsedGameTime.Milliseconds;
                     break;
                 case BotSophistication.Normal:
                     break;

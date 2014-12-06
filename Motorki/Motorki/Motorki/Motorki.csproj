@@ -108,7 +108,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameClasses\Agent.cs" />
+    <Compile Include="GameClasses\AgentController.cs" />
     <Compile Include="GameClasses\Bonus.cs" />
+    <Compile Include="GameClasses\BotAgent.cs" />
     <Compile Include="GameClasses\BotMotor.cs" />
     <Compile Include="GameClasses\GamePlay.cs" />
     <Compile Include="GameClasses\Map.cs" />

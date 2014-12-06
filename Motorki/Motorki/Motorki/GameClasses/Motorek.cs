@@ -1,7 +1,7 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using System;
 using Motorki.UIClasses;
 
 namespace Motorki.GameClasses
@@ -11,7 +11,7 @@ namespace Motorki.GameClasses
 
     public abstract class Motorek
     {
-        public float motorSpeedPerSecond = 300.0f; //units (pixels?) per second (*1.5 during bonus)
+        public float motorSpeedPerSecond = 250.0f; //units (pixels?) per second (*1.5 during bonus)
         public float motorTurnPerSecond = 360.0f; //degrees per second
 
         //internals
@@ -25,6 +25,16 @@ namespace Motorki.GameClasses
         public List<string> newCollided { get; set; }
         public List<string> oldCollided { get; set; }
         public Vector2[] boundPoints { get; private set; }
+
+        //motor controlling
+        /// <summary>
+        /// 0 - forward, 1 - turn right, -1 - turn left
+        /// </summary>
+        public int ctrlDirection { get; set; }
+        /// <summary>
+        /// true - brakes active, false - brakes not active
+        /// </summary>
+        public bool ctrlBrakes { get; set; }
 
         //graphics
         private Texture2D Textures = null;
@@ -113,6 +123,9 @@ namespace Motorki.GameClasses
             newCollided = new List<string>();
             oldCollided = new List<string>();
 
+            ctrlDirection = 0;
+            ctrlBrakes = false;
+
             trace = new MotorTrace(game, trackColor);
 
             name = "<template>";
@@ -147,10 +160,21 @@ namespace Motorki.GameClasses
 
         public void Update(GameTime gameTime)
         {
-            MindProc(gameTime);
+            //do some processing and control motorbike movement
+            if (HP > 0)
+            {
+                MindProc(gameTime);
+
+                float time = gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
+                float usableSpeed = motorSpeedPerSecond / (ctrlBrakes ? 2.0f : 1.0f); //apply speed bonuses here
+
+                rotation = (rotation + ctrlDirection * motorTurnPerSecond * time) % 360;
+                position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (usableSpeed * time);
+            }
 
             //update trace
-            trace.Add(gameTime, position, justSpawned);
+            if (HP > 0)
+                trace.Add(gameTime, position, justSpawned);
             trace.Update(gameTime);
 
             //change tires picture
