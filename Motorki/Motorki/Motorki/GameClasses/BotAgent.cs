@@ -27,7 +27,7 @@ namespace Motorki.GameClasses
         int target;
 
         /// <summary>
-        /// warning: motor should be created before creating an agent. if not, use AttachBike
+        /// warning: motor should be created before creating an agent. if not, use AttachBike to assign motor correctly
         /// </summary>
         public BotAgent(AgentController ac, string name, int motorID)
             : base(ac, name)
@@ -68,7 +68,7 @@ namespace Motorki.GameClasses
 
         public override void Process()
         {
-
+            //!!!to get last Update time check MotorkiGame.game.currentTime
         }
     }
 

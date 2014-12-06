@@ -63,7 +63,7 @@ namespace Motorki
         int connecting_stage;
 
         GameSettings gameSettings;
-        GameTime currentTime;
+        public GameTime currentTime { get; private set; }
 
         public MotorkiGame()
         {

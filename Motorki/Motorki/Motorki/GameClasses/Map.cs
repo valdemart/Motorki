@@ -460,7 +460,7 @@ namespace Motorki.GameClasses
             displacementVec = Vector2.Zero;
             damage = 0;
 
-            Vector2 motorDirVec = Utils.CalculateDirectionVector(MathHelper.ToRadians(motor.rotation));
+            Vector2 motorDirVec = Utils.CalculateDirectionVector(motor.rotation.ToRadians());
             foreach (MapEdge edge in Edges)
             {
                 Vector2 dispVec = Vector2.Zero;

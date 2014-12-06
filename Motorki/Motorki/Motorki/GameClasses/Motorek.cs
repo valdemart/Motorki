@@ -167,9 +167,9 @@ namespace Motorki.GameClasses
 
                 float time = gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
                 float usableSpeed = motorSpeedPerSecond / (ctrlBrakes ? 2.0f : 1.0f); //apply speed bonuses here
-
+                
                 rotation = (rotation + ctrlDirection * motorTurnPerSecond * time) % 360;
-                position += (new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)))) * (usableSpeed * time);
+                position += (new Vector2((float)Math.Sin(rotation.ToRadians()), -(float)Math.Cos(rotation.ToRadians()))) * (usableSpeed * time);
             }
 
             //update trace
@@ -188,7 +188,7 @@ namespace Motorki.GameClasses
             v[3] = new Vector2(-BackTexture[0].Width / 4, +BackTexture[0].Height / 2);
 
             Vector2[] v_prim = new Vector2[4];
-            Matrix mat = Matrix.CreateRotationZ(MathHelper.ToRadians(rotation));
+            Matrix mat = Matrix.CreateRotationZ(rotation.ToRadians());
             Vector2.Transform(v, ref mat, v_prim);
             for (int i = 0; i < 4; i++)
             {
@@ -219,7 +219,7 @@ namespace Motorki.GameClasses
 
                 game.GraphicsDevice.SetRenderTarget(game.layerTargets[3]);
                 sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                sb.Draw(motorRenderTarget, new Vector2(position.X - cameraX, position.Y - cameraY), new Rectangle(0, 0, BackTexture[0].Width, BackTexture[0].Height), Color.White, MathHelper.ToRadians(rotation), new Vector2(BackTexture[0].Width / 2, BackTexture[0].Height / 2), 1.0f, SpriteEffects.None, 0);
+                sb.Draw(motorRenderTarget, new Vector2(position.X - cameraX, position.Y - cameraY), new Rectangle(0, 0, BackTexture[0].Width, BackTexture[0].Height), Color.White, rotation.ToRadians(), new Vector2(BackTexture[0].Width / 2, BackTexture[0].Height / 2), 1.0f, SpriteEffects.None, 0);
                 if (GameSettings.gameoptNames)
                 {
                     float width = UIParent.defaultFont.MeasureString(name).X;
@@ -235,27 +235,27 @@ namespace Motorki.GameClasses
                     if (position.X - cameraX < 0)
                     {
                         if ((0 <= position.Y - cameraY) && (position.Y - cameraY < 600))
-                            sb.Draw(Textures, new Rectangle(0, (int)(position.Y - cameraY), PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, MathHelper.ToRadians(-90), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
+                            sb.Draw(Textures, new Rectangle(0, (int)(position.Y - cameraY), PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, (-90.0f).ToRadians(), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
                         else if (position.Y - cameraY < 0)
-                            sb.Draw(Textures, new Rectangle(0, 0, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, MathHelper.ToRadians(-45), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
+                            sb.Draw(Textures, new Rectangle(0, 0, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, (-45.0f).ToRadians(), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
                         else if (600 < position.Y - cameraY)
-                            sb.Draw(Textures, new Rectangle(0, 600, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, MathHelper.ToRadians(-135), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
+                            sb.Draw(Textures, new Rectangle(0, 600, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, (-135.0f).ToRadians(), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
                     }
                     else if (800 < position.X - cameraX)
                     {
                         if ((0 <= position.Y - cameraY) && (position.Y - cameraY < 600))
-                            sb.Draw(Textures, new Rectangle(800, (int)(position.Y - cameraY), PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, MathHelper.ToRadians(90), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
+                            sb.Draw(Textures, new Rectangle(800, (int)(position.Y - cameraY), PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, (90.0f).ToRadians(), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
                         else if (position.Y - cameraY < 0)
-                            sb.Draw(Textures, new Rectangle(800, 0, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, MathHelper.ToRadians(45), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
+                            sb.Draw(Textures, new Rectangle(800, 0, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, (45.0f).ToRadians(), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
                         else if (600 < position.Y - cameraY)
-                            sb.Draw(Textures, new Rectangle(800, 600, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, MathHelper.ToRadians(135), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
+                            sb.Draw(Textures, new Rectangle(800, 600, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, (135.0f).ToRadians(), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
                     }
                     else if ((0 <= position.X - cameraX) && (position.X - cameraX < 800))
                     {
                         if (position.Y - cameraY < 0)
-                            sb.Draw(Textures, new Rectangle((int)(position.X - cameraX), 0, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, MathHelper.ToRadians(0), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
+                            sb.Draw(Textures, new Rectangle((int)(position.X - cameraX), 0, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, (0.0f).ToRadians(), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
                         else if (600 < position.Y - cameraY)
-                            sb.Draw(Textures, new Rectangle((int)(position.X - cameraX), 600, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, MathHelper.ToRadians(180), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
+                            sb.Draw(Textures, new Rectangle((int)(position.X - cameraX), 600, PointerTexture.Width, PointerTexture.Height), PointerTexture, motorColor, (180.0f).ToRadians(), new Vector2(PointerTexture.Width / 2, 0), SpriteEffects.None, 0);
                     }
                     sb.End();
                 }
@@ -275,7 +275,7 @@ namespace Motorki.GameClasses
             v[3] = new Vector2(-BackTexture[0].Width / 4, +BackTexture[0].Height / 2);
 
             Vector2[] v_prim = new Vector2[4];
-            Matrix mat = Matrix.CreateRotationZ(MathHelper.ToRadians(rotation));
+            Matrix mat = Matrix.CreateRotationZ(rotation.ToRadians());
             Vector2.Transform(v, ref mat, v_prim);
 
             boundPoints = new Vector2[4];
@@ -283,37 +283,20 @@ namespace Motorki.GameClasses
                 boundPoints[i] = v_prim[i] + position;
         }
 
-        /// <param name="newRotation">note: ignore that value for now - rebound not implemented yet</param>
         public bool TestCollisions(ref Motorek motor, out Vector2 dispVec, out float newRotation, out float damage)
         {
             dispVec = Vector2.Zero;
             newRotation = 0;
             damage = 0;
 
-            Vector2 motorDirVec = Utils.CalculateDirectionVector(MathHelper.ToRadians(motor.rotation));
-            //for (int edge = 0; edge < 4; edge++)
-            //{
-            //    for (int i = 0; i < 4; i++)
-            //    {
-            //        Vector2 disp;
-            //        Vector2[] points = new Vector2[] { boundPoints[edge], boundPoints[(edge + 1) % 4] };
-            //        if (!Utils.TestLineAndPointCollision(points, Utils.CalculateLineFacing(points[0], points[1]), motor.boundPoints[i], motorDirVec, out disp))
-            //            continue;
-            //        if (disp.Length() > dispVec.Length())
-            //            dispVec = disp;
-            //    }
-            //    if (dispVec.Length() > 0)
-            //    {
-            //        damage = 25 * (1 - Vector2.Dot(Utils.CalculateDirectionVector(MathHelper.ToRadians(rotation)), motorDirVec)) / 2;
-            //        newRotation = MathHelper.ToDegrees(-(float)Math.Atan(motorDirVec.X / (-motorDirVec.Y)));
-            //        return true;
-            //    }
-            //}
+            Vector2 motorDirVec = Utils.CalculateDirectionVector(motor.rotation.ToRadians());
             if (Vector2.Dot(motorDirVec, position - motor.position) < 0)
                 return false;
             float radius = (BackTexture[0].Width + BackTexture[0].Height) / 2;
             float distance = (motor.position - position).Length();
 
+            if (distance == 0.0f)
+                return false;
             if (distance > radius)
                 return false;
             if (distance < radius)
@@ -321,8 +304,8 @@ namespace Motorki.GameClasses
                 Vector2 _ = motor.position - position;
                 _.Normalize();
                 dispVec = _ * radius * 0.1f;
-                damage = 25 * (1 - Vector2.Dot(Utils.CalculateDirectionVector(MathHelper.ToRadians(rotation)), motorDirVec)) / 2;
-                newRotation = MathHelper.ToDegrees(-(float)Math.Atan(_.X / (_.Y)));
+                damage = 25 * (1 - Vector2.Dot(Utils.CalculateDirectionVector(rotation.ToRadians()), motorDirVec)) / 2;
+                newRotation = (-(float)Math.Atan(_.X / (_.Y))).ToDegrees();
                 return true;
             }
 
@@ -375,12 +358,14 @@ namespace Motorki.GameClasses
             newRotation = 0;
             damage = 0;
 
-            Vector2 motorDirVec = Utils.CalculateDirectionVector(MathHelper.ToRadians(motor.rotation));
+            Vector2 motorDirVec = Utils.CalculateDirectionVector(motor.rotation.ToRadians());
             if (Vector2.Dot(motorDirVec, position - motor.position) < 0)
                 return false;
             float radius = ((MotorTrace.SpotTexture.Width + MotorTrace.SpotTexture.Height) / 2 + (motor.BackTexture[0].Width + motor.BackTexture[0].Height) / 2) / 2;
             float distance = (motor.position - position).Length();
 
+            if (distance == 0.0f)
+                return false;
             if (distance > radius)
                 return false;
             if (distance < radius)
@@ -389,7 +374,7 @@ namespace Motorki.GameClasses
                 _.Normalize();
                 dispVec = _ * radius * 0.1f;
                 damage = 10 * Math.Abs(Vector2.Dot(new Vector2(directionVec.Y, -directionVec.X), motorDirVec));
-                newRotation = MathHelper.ToDegrees(-(float)Math.Atan(_.X / (_.Y)));
+                newRotation = (-(float)Math.Atan(_.X / (_.Y))).ToDegrees();
                 return true;
             }
 
@@ -464,44 +449,6 @@ namespace Motorki.GameClasses
                     this.Add(new MotorTraceSpot(gameTime, p, spots[spots.Count - 1].rotation + (float)Math.Asin(sin_alpha)));
                 }
             }
-        }
-
-        //add animations later
-        /// <summary>
-        /// don't use it
-        /// </summary>
-        public void CollisionTest(ref Motorek motor)
-        {
-            //calculate rect points for motor
-            Vector2[] v = new Vector2[4];
-            v[0] = new Vector2(-motor.BackTexture[0].Width / 4, -motor.BackTexture[0].Height / 2);
-            v[1] = new Vector2(+motor.BackTexture[0].Width / 4, -motor.BackTexture[0].Height / 2);
-            v[2] = new Vector2(-motor.BackTexture[0].Width / 4, +motor.BackTexture[0].Height / 2);
-            v[3] = new Vector2(+motor.BackTexture[0].Width / 4, +motor.BackTexture[0].Height / 2);
-
-            Vector2[] v_prim = new Vector2[4];
-            Matrix matRotZ = Matrix.CreateRotationZ(MathHelper.ToRadians(motor.rotation));
-            Vector2.Transform(v, ref matRotZ, v_prim);
-            Vector2 directionVec = v_prim[0] + v_prim[1];
-            directionVec.Normalize();
-
-            //test spots
-            foreach (MotorTraceSpot spot in spots)
-            {
-                //check for collision
-
-                //cut down hp
-
-                /*Vector2 p1 = new Vector2((float)Math.Sin(spot.rotation), -(float)Math.Cos(spot.rotation));
-                Vector2 new_direction = position - spots[spots.Count - 1].position;
-                if ((new_direction.X == 0) && (new_direction.Y == 0))
-                    return;
-                new_direction.Normalize();
-                new_direction = new Vector2(new_direction.Y, -new_direction.X);
-                float sin_alpha = Vector2.Dot(new_direction, current_direction); //perpendicular dot product*/
-            }
-
-            return;
         }
 
         #region IList implementation

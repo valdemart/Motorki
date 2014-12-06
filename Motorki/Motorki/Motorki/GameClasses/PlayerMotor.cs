@@ -38,7 +38,7 @@ namespace Motorki.GameClasses
                                 ctrlBrakes = true;
                             break;
                         case Steering.Absolute:
-                            Vector2 current_direction = new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)));
+                            Vector2 current_direction = new Vector2((float)Math.Sin(rotation.ToRadians()), -(float)Math.Cos(rotation.ToRadians()));
                             Vector2 new_direction = Vector2.Zero;
                             if (InputEvents.IsKeyPressed(GameSettings.player1Keys[0])) //go left
                                 new_direction += new Vector2(-1, 0);
@@ -53,7 +53,7 @@ namespace Motorki.GameClasses
                             new_direction.Normalize();
                             new_direction = new Vector2(new_direction.Y, -new_direction.X);
                             float sin_alpha = Vector2.Dot(new_direction, current_direction); //perpendicular dot product
-                            float angle = MathHelper.ToDegrees((float)Math.Asin(sin_alpha));
+                            float angle = ((float)Math.Asin(sin_alpha)).ToDegrees();
                             ctrlBrakes = false;
                             ctrlDirection = (angle > 0 ? 1 : (angle < 0 ? -1 : 0));
                             break;
@@ -73,7 +73,7 @@ namespace Motorki.GameClasses
                                 ctrlBrakes = true;
                             break;
                         case Steering.Absolute:
-                            Vector2 current_direction = new Vector2((float)Math.Sin(MathHelper.ToRadians(rotation)), -(float)Math.Cos(MathHelper.ToRadians(rotation)));
+                            Vector2 current_direction = new Vector2((float)Math.Sin(rotation.ToRadians()), -(float)Math.Cos(rotation.ToRadians()));
                             Vector2 new_direction = Vector2.Zero;
                             if (InputEvents.IsKeyPressed(GameSettings.player2Keys[0])) //go left
                                 new_direction += new Vector2(-1, 0);
@@ -88,7 +88,7 @@ namespace Motorki.GameClasses
                             new_direction.Normalize();
                             new_direction = new Vector2(new_direction.Y, -new_direction.X);
                             float sin_alpha = Vector2.Dot(new_direction, current_direction); //perpendicular dot product
-                            float angle = MathHelper.ToDegrees((float)Math.Asin(sin_alpha));
+                            float angle = ((float)Math.Asin(sin_alpha)).ToDegrees();
                             ctrlBrakes = false;
                             ctrlDirection = (angle > 0 ? 1 : (angle < 0 ? -1 : 0));
                             break;

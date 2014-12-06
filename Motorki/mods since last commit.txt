@@ -5,21 +5,7 @@ legend:
 # - ready for tests
 ? - possibly to do
 
-- game
-	- team deathmatch available (another locked due to no testing but it should be ok to just unlock them)
-- gameplay
-	- bugfix: frags/point counters now working correctly during collisions
-	- bugfix: frags/point counters now working correctly for all frags/points changes
-	- respawning algorithm corrected for team games
-	- frags/points counters text changed
-- UIClasses
-	- UITextBox now has character filtering routine available (UITextBox.CharacterFilter)
-		! character filtering is not used during programmatic text changes - set text programmatically to the correct text before allowing user actions
-- Motor subclasses
-	- changed motor controling mechanism (from position/rotation to ctrlBrakes/ctrlDirection)
-- bots
-	- AgentController, Agent and AgentMessage classes
-	- BotAgent and BotAgentMessage classes started
+<no changes made>
 
 todo:
 + connecting

@@ -2,7 +2,7 @@
 
 namespace Motorki.GameClasses
 {
-    public class Utils
+    public static class Utils
     {
         /// <summary>
         /// calculates coordinates of an image of a point on a line
@@ -69,6 +69,19 @@ namespace Motorki.GameClasses
             Vector2 dirVec = Vector2.Transform(new Vector2(0, -1), Matrix.CreateRotationZ(radians));
             dirVec.Normalize();
             return dirVec;
+        }
+
+        static float Deg2Rad = (float)(System.Math.PI / 180.0f);
+        static float Rad2Deg = (float)(180.0f / System.Math.PI);
+
+        public static float ToRadians(this float degrees)
+        {
+            return degrees * Deg2Rad;
+        }
+
+        public static float ToDegrees(this float radians)
+        {
+            return radians * Rad2Deg;
         }
     }
 }
