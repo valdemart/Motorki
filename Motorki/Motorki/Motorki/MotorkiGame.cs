@@ -1,11 +1,11 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Motorki.GameClasses;
 using Motorki.GameScreens;
 using Motorki.UIClasses;
-using System;
-using System.Collections.Generic;
 
 namespace Motorki
 {
@@ -244,8 +244,8 @@ namespace Motorki
                             if ((cameraStickBikeID == -1) && (GameSettings.gameSlots[i].type == typeof(BotMotor)))
                                 cameraStickBikeID = i;
                         }
-                    GameSettings.gamePlayScreen1 = new GamePlay();
-                    GameSettings.gamePlayScreen1.LoadAndInitialize(currentTime, (playerBikeID != -1 ? playerBikeID : cameraStickBikeID));
+                    GameSettings.gamePlayScreen = new GamePlay();
+                    GameSettings.gamePlayScreen.LoadAndInitialize(currentTime, (playerBikeID != -1 ? playerBikeID : cameraStickBikeID));
                     this.menu = new GameScreen_GameUI(game, (playerBikeID != -1 ? playerBikeID : cameraStickBikeID), 800, 600);
                     this.menu.OnExit += menu_OnExit;
                     this.menu.LoadAndInitialize();
@@ -323,8 +323,8 @@ namespace Motorki
                     menu_bots[i].Update(gameTime);
             }
 
-            if (GameSettings.gamePlayScreen1 != null)
-                GameSettings.gamePlayScreen1.Update(gameTime);
+            if (GameSettings.gamePlayScreen != null)
+                GameSettings.gamePlayScreen.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -348,8 +348,8 @@ namespace Motorki
             }
 
             //render game
-            if (GameSettings.gamePlayScreen1 != null)
-                GameSettings.gamePlayScreen1.Draw(ref spriteBatch, gameTime);
+            if (GameSettings.gamePlayScreen != null)
+                GameSettings.gamePlayScreen.Draw(ref spriteBatch, gameTime);
 
             //gather screen layers
             GraphicsDevice.SetRenderTarget(null);
@@ -501,14 +501,14 @@ namespace Motorki
             btnSteering.PositionAndSize = new Rectangle(0, 0, 200, 30);
             btnSteering.Action += (UIButton_Action)((btn) =>
             {
-                if (GameSettings.player1Steering == PlayerMotor.Steering.Absolute)
+                if (GameSettings.playerSteering == PlayerMotor.Steering.Absolute)
                 {
-                    GameSettings.player1Steering = PlayerMotor.Steering.Relative;
+                    GameSettings.playerSteering = PlayerMotor.Steering.Relative;
                     btn.Text = "Steering: Relative";
                 }
                 else
                 {
-                    GameSettings.player1Steering = PlayerMotor.Steering.Absolute;
+                    GameSettings.playerSteering = PlayerMotor.Steering.Absolute;
                     btn.Text = "Steering: Absolute";
                 }
             });

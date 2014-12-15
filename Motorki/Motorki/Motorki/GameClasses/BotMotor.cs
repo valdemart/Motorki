@@ -14,6 +14,7 @@ namespace Motorki.GameClasses
         public BotMotor(MotorkiGame game, Color motorColor, BotSophistication sophistication = BotSophistication.Easy)
             : base(game, motorColor, new Color(255 - motorColor.R, 255 - motorColor.G, 255 - motorColor.B))
         {
+            //do some randomization
             int a = MotorkiGame.random.Next(1000);
             for (int i = 0; i < a * 1000; i++)
                 a = (a + a - a) * a / a;
@@ -24,6 +25,20 @@ namespace Motorki.GameClasses
             cmd_time[1] = 0;
 
             this.sophistication = sophistication;
+        }
+
+        public override void LoadAndInitialize(Rectangle framingRect)
+        {
+            base.LoadAndInitialize(framingRect);
+
+            //check is there need to start agent
+            if (sophistication != BotSophistication.Easy)
+            {
+                if (GameSettings.agentController != null)
+                {
+                    GameSettings.agentController.RegisterAgent(new Agent(GameSettings.agentController, "bot" + name));
+                }
+            }
         }
 
         protected override void MindProc(GameTime gameTime)

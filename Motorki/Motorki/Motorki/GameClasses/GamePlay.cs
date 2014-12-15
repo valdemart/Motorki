@@ -109,22 +109,31 @@ namespace Motorki.GameClasses
             //map parameters already loaded during new game/join game setup
 
             //setup bikes
+            bool need_agentcontroller = false;
             for (int i = 0; i < GameSettings.gameSlots.Length; i++)
                 if (GameSettings.gameSlots[i] != null)
                 {
                     if (GameSettings.gameSlots[i].type == typeof(BotMotor))
                     {
-                        GameSettings.gameMotors[i] = new BotMotor(MotorkiGame.game, (team_game ? (i / 5 == 0 ? Color.Red : Color.Blue) : GetBotBikeColor()));
+                        GameSettings.gameMotors[i] = new BotMotor(MotorkiGame.game, (team_game ? (i / 5 == 0 ? Color.Red : Color.Blue) : GetBotBikeColor()), (BotMotor.BotSophistication)GameSettings.gameSlots[i].playerID);
                         GameSettings.gameMotors[i].name = GameSettings.gameSlots[i].name;
+                        if ((BotMotor.BotSophistication)GameSettings.gameSlots[i].playerID != BotMotor.BotSophistication.Easy)
+                        {
+                            need_agentcontroller = true;
+                        }
                     }
                     else if ((GameSettings.gameSlots[i].type == typeof(PlayerMotor)) && (GameSettings.gameSlots[i].playerID != -1))
                     {
-                        GameSettings.gameMotors[i] = new PlayerMotor(MotorkiGame.game, GameSettings.gameSlots[i].playerID, (team_game ? (i / 5 == 0 ? Color.Red : Color.Blue) : (GameSettings.gameSlots[i].playerID == 0 ? GameSettings.player1Color : GameSettings.player2Color)));
-                        GameSettings.gameMotors[i].name = (GameSettings.gameSlots[i].playerID == 0 ? GameSettings.player1Name : GameSettings.player2Name);
+                        GameSettings.gameMotors[i] = new PlayerMotor(MotorkiGame.game, GameSettings.gameSlots[i].playerID, (team_game ? (i / 5 == 0 ? Color.Red : Color.Blue) : (GameSettings.gameSlots[i].playerID == 0 ? GameSettings.playerColor : GetBotBikeColor())));
+                        GameSettings.gameMotors[i].name = (GameSettings.gameSlots[i].playerID == 0 ? GameSettings.playerName : "<network>");
                     }
                 }
                 else
                     GameSettings.gameMotors[i] = null;
+            if (need_agentcontroller)
+            {
+                GameSettings.agentController = new AgentController();
+            }
 
             //load map data and initialize it
             GameSettings.gameMap.LoadAndInitialize();
@@ -181,7 +190,7 @@ namespace Motorki.GameClasses
             if (GameSettings.gameMotors[cameraStickBikeID].HP > 0)
             {
                 for (int i = 0; i < GameSettings.gameMotors.Length; i++)
-                    if ((GameSettings.gameMotors[i] != null) && (i != cameraStickBikeID) && (GameSettings.gameMotors[i].HP != 0))
+                    if ((GameSettings.gameMotors[i] != null) && (i != cameraStickBikeID) && (GameSettings.gameMotors[i].HP > 0))
                         return false;
                 return true;
             }
@@ -236,7 +245,7 @@ namespace Motorki.GameClasses
             {
                 int stickbikePoints = GameSettings.gameMotors[cameraStickBikeID].PointsCount;
                 for (int i = 0; i < GameSettings.gameMotors.Length; i++)
-                    if ((GameSettings.gameMotors[i] != null) && (i != cameraStickBikeID) && (GameSettings.gameMotors[i].PointsCount > stickbikePoints))
+                    if ((GameSettings.gameMotors[i] != null) && (i != cameraStickBikeID) && (GameSettings.gameMotors[i].PointsCount >= stickbikePoints))
                         return true;
                 return false;
             }
@@ -275,7 +284,7 @@ namespace Motorki.GameClasses
             //check stick bike for game continue conditions
             int team = 1 - (cameraStickBikeID / (GameSettings.gameMotors.Length / 2));
             for (int i = 0; i < GameSettings.gameMotors.Length / 2; i++)
-                if ((GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i] != null) && (GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i].HP != 0))
+                if ((GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i] != null) && (GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i].HP > 0))
                     return false;
             return true;
         }
@@ -285,7 +294,7 @@ namespace Motorki.GameClasses
             //check stick bike for losing conditions
             int team = cameraStickBikeID / (GameSettings.gameMotors.Length / 2);
             for (int i = 0; i < GameSettings.gameMotors.Length / 2; i++)
-                if ((GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i] != null) && (GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i].HP != 0))
+                if ((GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i] != null) && (GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i].HP > 0))
                     return false;
             return true;
         }
@@ -322,11 +331,15 @@ namespace Motorki.GameClasses
             if ((currentTime - startTime) / 60.0 >= GameSettings.gameTimeLimit)
             {
                 int team = cameraStickBikeID / (GameSettings.gameMotors.Length / 2);
-                int sum = 0;
+                int sum1 = 0, sum2 = 0;
                 for (int i = 0; i < GameSettings.gameMotors.Length / 2; i++)
-                    if (GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i] != null)
-                        sum += GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i].PointsCount;
-                if (sum >= GameSettings.gamePointLimit)
+                {
+                    if (GameSettings.gameMotors[i] != null)
+                        sum1 += GameSettings.gameMotors[i].PointsCount;
+                    if (GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 + i] != null)
+                        sum2 += GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 + i].PointsCount;
+                }
+                if ((team == 0 && sum1 >= sum2) || (team == 1 && sum1 <= sum2))
                     return true;
                 return false;
             }
@@ -339,12 +352,16 @@ namespace Motorki.GameClasses
             //check is time out
             if ((currentTime - startTime) / 60.0 >= GameSettings.gameTimeLimit)
             {
-                int team = 1 - (cameraStickBikeID / (GameSettings.gameMotors.Length / 2));
-                int sum = 0;
+                int team = cameraStickBikeID / (GameSettings.gameMotors.Length / 2);
+                int sum1 = 0, sum2 = 0;
                 for (int i = 0; i < GameSettings.gameMotors.Length / 2; i++)
-                    if (GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i] != null)
-                        sum += GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 * team + i].PointsCount;
-                if (sum >= GameSettings.gamePointLimit)
+                {
+                    if (GameSettings.gameMotors[i] != null)
+                        sum1 += GameSettings.gameMotors[i].PointsCount;
+                    if (GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 + i] != null)
+                        sum2 += GameSettings.gameMotors[GameSettings.gameMotors.Length / 2 + i].PointsCount;
+                }
+                if ((team == 0 && sum1 <= sum2) || (team == 1 && sum1 >= sum2))
                     return true;
                 return false;
             }
@@ -530,6 +547,14 @@ namespace Motorki.GameClasses
                 if (finish)
                 {
                     //do game finish processing
+                    if (winning && losing)
+                    {
+                        System.Windows.Forms.MessageBox.Show("tied");
+                        gameStarted = false;
+                        if (gameFinished != null)
+                            gameFinished();
+                        return;
+                    }
                     if (winning)
                     {
                         System.Windows.Forms.MessageBox.Show("won");

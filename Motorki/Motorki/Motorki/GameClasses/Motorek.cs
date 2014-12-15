@@ -146,10 +146,10 @@ namespace Motorki.GameClasses
         }
 
         /// <summary>
-        /// prepare for play
+        /// prepare for play. When overridden, new method must call base.LoadAndInitialize(...) first
         /// </summary>
         /// <param name="framingRect">bounding rectangle to limit movement</param>
-        public void LoadAndInitialize(Rectangle framingRect)
+        public virtual void LoadAndInitialize(Rectangle framingRect)
         {
             Textures = game.Content.Load<Texture2D>("common");
             trace.LoadAndInitialize();

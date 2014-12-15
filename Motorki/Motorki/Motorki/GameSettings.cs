@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Motorki.GameClasses;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Motorki.GameClasses;
 
 namespace Motorki
 {
@@ -37,7 +37,7 @@ namespace Motorki
         RandomizationBomb, //forces enemy bikes to move randomly for specified amount of time
     }
 
-    public enum Default_Player1Keys
+    public enum Default_playerKeys
     {
         GoLeft = Keys.A, GoRight = Keys.D,
         GoUp = Keys.W, GoDown = Keys.S,
@@ -49,24 +49,13 @@ namespace Motorki
         RandomizationBomb = Keys.D3,
     }
 
-    public enum Default_Player2Keys
-    {
-        GoLeft = Keys.Left, GoRight = Keys.Right,
-        GoUp = Keys.Up, GoDown = Keys.Down,
-        OpenChat = Keys.Enter,
-        BotMenu = Keys.OemBackslash,
-        //bonuses
-        SpeedUp = Keys.OemComma,
-        TraceWiden = Keys.OemPeriod,
-        RandomizationBomb = Keys.OemQuestion,
-    }
-
     public class MotorShortDescription
     {
         public Type type { get; private set; }
         public string name { get; private set; }
         public int playerID { get; private set; }
 
+        /// <param name="playerID">for bot motors this value is (int)BotMotor.BotSophistication</param>
         public MotorShortDescription(Type type, string name, int playerID)
         {
             this.type = type;
@@ -91,7 +80,6 @@ namespace Motorki
         /// </summary>
         public static int gameTimeLimit { get; set; }
         public static string gameServerIP { get; set; } //gameServerName discarded because identical with gameName
-        public static bool gameTwoPlayer { get; set; }
         /// <summary>
         /// game slots settings.
         /// team is determined by index: 0-4 - red team, 5-9 - blue team
@@ -101,25 +89,18 @@ namespace Motorki
         /// this table is filled only during game - contains server data about motors
         /// </summary>
         public static Motorek[] gameMotors { get; set; }
-        public static GamePlay gamePlayScreen1 { get; set; }
+        public static GamePlay gamePlayScreen { get; set; }
+        public static AgentController agentController { get; set; }
 
-        //options: player 1
-
-        public static string player1Name { get; set; }
-        public static Keys[] player1Keys { get; set; }
-        public static PlayerMotor.Steering player1Steering { get; set; }
-        public static Color player1Color { get; set; }
-
-        //options: player 2
-        public static string player2Name { get; set; }
-        public static Keys[] player2Keys { get; set; }
-        public static PlayerMotor.Steering player2Steering { get; set; }
-        public static Color player2Color { get; set; }
+        //options: player
+        public static string playerName { get; set; }
+        public static Keys[] playerKeys { get; set; }
+        public static PlayerMotor.Steering playerSteering { get; set; }
+        public static Color playerColor { get; set; }
 
         //options: video
         public static int videoGraphMode { get; set; } //index on the list of available modes - card dependent
         public static bool videoFullscreen { get; set; }
-        public static int videoSplitScreenMode { get; set; } //0 - player1: up, player2: down; 1 - player1: left, player2: right
 
         //options: audio
         public static bool audioEnabled { get; set; }
@@ -142,7 +123,6 @@ namespace Motorki
             gameFragLimit = 10;
             gameTimeLimit = 0;
             gameServerIP = "127.0.0.1";
-            gameTwoPlayer = false;
             gameSlots = new MotorShortDescription[10];
             gameMotors = new Motorek[10];
             for (int i = 0; i < 10; i++)
@@ -150,24 +130,19 @@ namespace Motorki
                 gameSlots[i] = null;
                 gameMotors[i] = null;
             }
+            agentController = null;
 
-            player1Name = "Gracz1";
-            player2Name = "Gracz2";
-            player1Keys = new Keys[Enum.GetNames(typeof(GameKeyNames)).Count()];
-            player2Keys = new Keys[Enum.GetNames(typeof(GameKeyNames)).Count()];
+            playerName = "Gracz1";
+            playerKeys = new Keys[Enum.GetNames(typeof(GameKeyNames)).Count()];
             for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Count(); i++)
             {
-                player1Keys[i] = (Keys)Enum.Parse(typeof(Default_Player1Keys), Enum.GetNames(typeof(GameKeyNames))[i]);
-                player2Keys[i] = (Keys)Enum.Parse(typeof(Default_Player2Keys), Enum.GetNames(typeof(GameKeyNames))[i]);
+                playerKeys[i] = (Keys)Enum.Parse(typeof(Default_playerKeys), Enum.GetNames(typeof(GameKeyNames))[i]);
             }
-            player1Steering = PlayerMotor.Steering.Relative;
-            player2Steering = PlayerMotor.Steering.Relative;
-            player1Color = Color.Yellow;
-            player2Color = Color.Red;
-
+            playerSteering = PlayerMotor.Steering.Relative;
+            playerColor = Color.Yellow;
+            
             videoGraphMode = 0; //default graph mode
             videoFullscreen = false; //windowed by default
-            videoSplitScreenMode = 0; //horizontal split
 
             audioEnabled = false;
             audioVolumePercent = 100;
@@ -185,31 +160,20 @@ namespace Motorki
             XDocument doc = new XDocument();
             XElement root = new XElement("MotorkiSettingsFile");
 
-            //player1
-            XElement player1 = new XElement("player1");
-            player1.Add(new XElement("name", player1Name));
-            player1.Add(new XElement("color", new XAttribute("r", player1Color.R), new XAttribute("g", player1Color.G), new XAttribute("b", player1Color.B)));
-            player1.Add(new XElement("keys"));
+            //player
+            XElement player = new XElement("player");
+            player.Add(new XElement("name", playerName));
+            player.Add(new XElement("color", new XAttribute("r", playerColor.R), new XAttribute("g", playerColor.G), new XAttribute("b", playerColor.B)));
+            player.Add(new XElement("keys"));
             for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Count(); i++)
-                player1.Element("keys").Add(new XElement(Enum.GetNames(typeof(GameKeyNames))[i], player1Keys[i].ToString()));
-            player1.Add(new XElement("steering", player1Steering));
-            root.Add(player1);
-
-            //player2
-            XElement player2 = new XElement("player2");
-            player2.Add(new XElement("name", player2Name));
-            player2.Add(new XElement("color", new XAttribute("r", player2Color.R), new XAttribute("g", player2Color.G), new XAttribute("b", player2Color.B)));
-            player2.Add(new XElement("keys"));
-            for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Count(); i++)
-                player2.Element("keys").Add(new XElement(Enum.GetNames(typeof(GameKeyNames))[i], player2Keys[i].ToString()));
-            player2.Add(new XElement("steering", player2Steering));
-            root.Add(player2);
+                player.Element("keys").Add(new XElement(Enum.GetNames(typeof(GameKeyNames))[i], playerKeys[i].ToString()));
+            player.Add(new XElement("steering", playerSteering));
+            root.Add(player);
 
             //video
             XElement video = new XElement("video");
             video.Add(new XElement("mode", videoGraphMode));
             video.Add(new XElement("fullscreen", videoFullscreen));
-            video.Add(new XElement("splitscreenmode", videoSplitScreenMode));
             root.Add(video);
 
             //audio
@@ -244,27 +208,18 @@ namespace Motorki
                     if (root == null)
                         return;
 
-                    //player1
-                    XElement player1 = root.Element("player1");
-                    player1Name = player1.Element("name").Value;
-                    player1Color = new Color(int.Parse(player1.Element("color").Attribute("r").Value), int.Parse(player1.Element("color").Attribute("g").Value), int.Parse(player1.Element("color").Attribute("b").Value));
+                    //player
+                    XElement player = root.Element("player");
+                    playerName = player.Element("name").Value;
+                    playerColor = new Color(int.Parse(player.Element("color").Attribute("r").Value), int.Parse(player.Element("color").Attribute("g").Value), int.Parse(player.Element("color").Attribute("b").Value));
                     for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Count(); i++)
-                        player1Keys[i] = (Keys)Enum.Parse(typeof(Keys), player1.Element("keys").Element(Enum.GetNames(typeof(GameKeyNames))[i]).Value);
-                    player1Steering = (PlayerMotor.Steering)Enum.Parse(typeof(PlayerMotor.Steering), player1.Element("steering").Value);
-
-                    //player2
-                    XElement player2 = root.Element("player2");
-                    player2Name = player2.Element("name").Value;
-                    player2Color = new Color(int.Parse(player2.Element("color").Attribute("r").Value), int.Parse(player2.Element("color").Attribute("g").Value), int.Parse(player2.Element("color").Attribute("b").Value));
-                    for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Count(); i++)
-                        player2Keys[i] = (Keys)Enum.Parse(typeof(Keys), player2.Element("keys").Element(Enum.GetNames(typeof(GameKeyNames))[i]).Value);
-                    player2Steering = (PlayerMotor.Steering)Enum.Parse(typeof(PlayerMotor.Steering), player2.Element("steering").Value);
+                        playerKeys[i] = (Keys)Enum.Parse(typeof(Keys), player.Element("keys").Element(Enum.GetNames(typeof(GameKeyNames))[i]).Value);
+                    playerSteering = (PlayerMotor.Steering)Enum.Parse(typeof(PlayerMotor.Steering), player.Element("steering").Value);
 
                     //video
                     XElement video = root.Element("video");
                     videoGraphMode = int.Parse(video.Element("mode").Value);
                     videoFullscreen = bool.Parse(video.Element("fullscreen").Value);
-                    videoSplitScreenMode = int.Parse(video.Element("splitscreenmode").Value);
 
                     //audio
                     XElement audio = root.Element("audio");

@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Motorki.GameClasses;
 using Motorki.UIClasses;
-using System;
 
 namespace Motorki.GameScreens
 {
@@ -29,7 +29,6 @@ namespace Motorki.GameScreens
                         UILabel label;
                         UITextBox textbox;
                         UIComboBox combo;
-                        UICheckBox check;
                         UIImage logo;
 
                         logo = new UIImage(game);
@@ -74,7 +73,6 @@ namespace Motorki.GameScreens
                             switch ((GameType)cbox.SelectedItem.Tag)
                             {
                                 case GameType.DeathMatch:
-                                    UIParent.UI["btnProceedGame"].Enabled = true;
                                     UIParent.UI["labelGameDescription"].Text = "Destroy specified number of enemy bikes";
                                     UIParent.UI["tboxFragLimit"].Enabled = true;
                                     UIParent.UI["tboxPointLimit"].Enabled = false;
@@ -85,7 +83,6 @@ namespace Motorki.GameScreens
                                     ((UIComboBox)UIParent.UI["cboxMapName"]).SelectedIndex = 0;
                                     break;
                                 case GameType.Demolition:
-                                    UIParent.UI["btnProceedGame"].Enabled = true;
                                     UIParent.UI["labelGameDescription"].Text = "Destroy all enemy bikes";
                                     UIParent.UI["tboxFragLimit"].Enabled = false;
                                     UIParent.UI["tboxPointLimit"].Enabled = false;
@@ -96,7 +93,6 @@ namespace Motorki.GameScreens
                                     ((UIComboBox)UIParent.UI["cboxMapName"]).SelectedIndex = 0;
                                     break;
                                 case GameType.PointMatch:
-                                    UIParent.UI["btnProceedGame"].Enabled = true;
                                     UIParent.UI["labelGameDescription"].Text = "Gather specified amount of points by destroying enemy bikes";
                                     UIParent.UI["tboxFragLimit"].Enabled = false;
                                     UIParent.UI["tboxPointLimit"].Enabled = true;
@@ -107,7 +103,6 @@ namespace Motorki.GameScreens
                                     ((UIComboBox)UIParent.UI["cboxMapName"]).SelectedIndex = 0;
                                     break;
                                 case GameType.TimeMatch:
-                                    UIParent.UI["btnProceedGame"].Enabled = true;
                                     UIParent.UI["labelGameDescription"].Text = "Gather as much points as possible in specified amount of time";
                                     UIParent.UI["tboxFragLimit"].Enabled = false;
                                     UIParent.UI["tboxPointLimit"].Enabled = false;
@@ -118,7 +113,6 @@ namespace Motorki.GameScreens
                                     ((UIComboBox)UIParent.UI["cboxMapName"]).SelectedIndex = 0;
                                     break;
                                 case GameType.TeamDeathMatch:
-                                    UIParent.UI["btnProceedGame"].Enabled = true;
                                     UIParent.UI["labelGameDescription"].Text = "Destroy specified number of bikes from opposite team";
                                     UIParent.UI["tboxFragLimit"].Enabled = true;
                                     UIParent.UI["tboxPointLimit"].Enabled = false;
@@ -129,8 +123,7 @@ namespace Motorki.GameScreens
                                     ((UIComboBox)UIParent.UI["cboxMapName"]).SelectedIndex = 0;
                                     break;
                                 case GameType.TeamDemolition:
-                                    UIParent.UI["btnProceedGame"].Enabled = false;
-                                    UIParent.UI["labelGameDescription"].Text = "(locked) Destroy all bikes from opposite team";
+                                    UIParent.UI["labelGameDescription"].Text = "Destroy all bikes from opposite team";
                                     UIParent.UI["tboxFragLimit"].Enabled = false;
                                     UIParent.UI["tboxPointLimit"].Enabled = false;
                                     UIParent.UI["tboxTimeLimit"].Enabled = false;
@@ -140,8 +133,7 @@ namespace Motorki.GameScreens
                                     ((UIComboBox)UIParent.UI["cboxMapName"]).SelectedIndex = 0;
                                     break;
                                 case GameType.TeamPointMatch:
-                                    UIParent.UI["btnProceedGame"].Enabled = false;
-                                    UIParent.UI["labelGameDescription"].Text = "(locked) Help your team gather specified amount of points by destroying bikes from opposite team";
+                                    UIParent.UI["labelGameDescription"].Text = "Help your team gather specified amount of points by destroying bikes from opposite team";
                                     UIParent.UI["tboxFragLimit"].Enabled = false;
                                     UIParent.UI["tboxPointLimit"].Enabled = true;
                                     UIParent.UI["tboxTimeLimit"].Enabled = false;
@@ -151,8 +143,7 @@ namespace Motorki.GameScreens
                                     ((UIComboBox)UIParent.UI["cboxMapName"]).SelectedIndex = 0;
                                     break;
                                 case GameType.TeamTimeMatch:
-                                    UIParent.UI["btnProceedGame"].Enabled = false;
-                                    UIParent.UI["labelGameDescription"].Text = "(locked) Help your team gather as much points as possible in specified amount of time";
+                                    UIParent.UI["labelGameDescription"].Text = "Help your team gather as much points as possible in specified amount of time";
                                     UIParent.UI["tboxFragLimit"].Enabled = false;
                                     UIParent.UI["tboxPointLimit"].Enabled = false;
                                     UIParent.UI["tboxTimeLimit"].Enabled = true;
@@ -202,7 +193,7 @@ namespace Motorki.GameScreens
                         {
                             return (ch >= '0') && (ch <= '9');
                         });
-                        textbox.Text = "" + GameSettings.gameFragLimit;
+                        textbox.Text = "" + (GameSettings.gameFragLimit == 0 ? 10 : GameSettings.gameFragLimit);
                         UIParent.UI.Add(textbox);
 
                         label = new UILabel(game);
@@ -220,13 +211,13 @@ namespace Motorki.GameScreens
                         {
                             return (ch >= '0') && (ch <= '9');
                         });
-                        textbox.Text = "" + GameSettings.gamePointLimit;
+                        textbox.Text = "" + (GameSettings.gamePointLimit == 0 ? 10000 : GameSettings.gamePointLimit);
                         UIParent.UI.Add(textbox);
 
                         label = new UILabel(game);
                         label.AutoSize = true;
                         label.PositionAndSize = new Rectangle(10, textbox.PositionAndSize.Bottom + 10, 0, 0);
-                        label.Text = "Time limit: ";
+                        label.Text = "Time limit (minutes): ";
                         UIParent.UI.Add(label);
 
                         textbox = new UITextBox(game);
@@ -238,16 +229,8 @@ namespace Motorki.GameScreens
                         {
                             return (ch >= '0') && (ch <= '9');
                         });
-                        textbox.Text = "" + GameSettings.gameTimeLimit;
+                        textbox.Text = "" + (GameSettings.gameTimeLimit == 0 ? 3 : GameSettings.gameTimeLimit);
                         UIParent.UI.Add(textbox);
-
-                        check = new UICheckBox(game);
-                        check.Name = "cbTwoPlayer";
-                        check.Enabled = false; //!!!
-                        check.AutoSize = true;
-                        check.PositionAndSize = new Rectangle(label.PositionAndSize.Left, textbox.PositionAndSize.Bottom + 5, 0, 0);
-                        check.Text = "Start two-player game";
-                        UIParent.UI.Add(check);
 
                         button = new UIButton(game);
                         button.Name = "btnProceedGame";
@@ -266,7 +249,6 @@ namespace Motorki.GameScreens
                             catch (Exception) { GameSettings.gamePointLimit = 1000; }
                             try { GameSettings.gameTimeLimit = int.Parse(UIParent.UI["tboxTimeLimit"].Text); }
                             catch (Exception) { GameSettings.gameTimeLimit = 120; }
-                            GameSettings.gameTwoPlayer = ((UICheckBox)UIParent.UI["cbTwoPlayer"]).Checked;
 
                             UIParent.ClearESCHook();
                             oResult = new GameScreen_NewGame(game, 1);
@@ -317,12 +299,13 @@ namespace Motorki.GameScreens
                         logo.PositionAndSize = new Rectangle(400 - 250, 20, 500, 75);
                         UIParent.UI.Add(logo);
 
+                        Rectangle last_pos = new Rectangle(10, logo.PositionAndSize.Bottom + 5, 0, 0);
                         for (int _t = 0; _t < 2; _t++)
                         {
                             if (team_game)
                                 enabledSlotsCount = 0;
 
-                            Rectangle last_pos = new Rectangle(10 + 400 * _t, logo.PositionAndSize.Bottom + 5, 40 + 400 * _t, 195 + 400 * _t);
+                            last_pos = new Rectangle(10 + 400 * _t, logo.PositionAndSize.Bottom + 5, 40 + 400 * _t, 195 + 400 * _t);
 
                             if (team_game)
                             {
@@ -366,9 +349,8 @@ namespace Motorki.GameScreens
                                             UIParent.UI["btnProceedGame"].Enabled = true;
                                             UIParent.UI[btn.Name.Substring(0, 4) + "Name"].Enabled = true;
                                             ((UIComboBox)UIParent.UI[btn.Name.Substring(0, 4) + "Name"]).Values.Clear();
-                                            ((UIComboBox)UIParent.UI[btn.Name.Substring(0, 4) + "Name"]).Values.Add(new UITaggedValue("<empty>", -1));
-                                            ((UIComboBox)UIParent.UI[btn.Name.Substring(0, 4) + "Name"]).Values.Add(new UITaggedValue(GameSettings.player1Name, 0));
-                                            ((UIComboBox)UIParent.UI[btn.Name.Substring(0, 4) + "Name"]).Values.Add(new UITaggedValue(GameSettings.player2Name, 1));
+                                            ((UIComboBox)UIParent.UI[btn.Name.Substring(0, 4) + "Name"]).Values.Add(new UITaggedValue(GameSettings.playerName, 0));
+                                            ((UIComboBox)UIParent.UI[btn.Name.Substring(0, 4) + "Name"]).Values.Add(new UITaggedValue("<network player>", -1));
                                             ((UIComboBox)UIParent.UI[btn.Name.Substring(0, 4) + "Name"]).SelectedIndex = 0;
                                             break;
                                         case "Player":
@@ -399,6 +381,22 @@ namespace Motorki.GameScreens
                             }
                         }
 
+                        label = new UILabel(game);
+                        label.AutoSize = true;
+                        label.PositionAndSize = new Rectangle(10, last_pos.Top + 20, 0, 0);
+                        label.Text = "Bot sophistication: ";
+                        UIParent.UI.Add(label);
+                        combo = new UIComboBox(game);
+                        combo.Name = "comboBotLevel";
+                        combo.Edible = false;
+                        combo.MaxDisplayedItems = 3;
+                        combo.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, label.PositionAndSize.Top, 150, 0);
+                        combo.Values.Add(new UITaggedValue("easy", BotMotor.BotSophistication.Easy));
+                        combo.Values.Add(new UITaggedValue("normal", BotMotor.BotSophistication.Normal));
+                        combo.Values.Add(new UITaggedValue("hard", BotMotor.BotSophistication.Hard));
+                        combo.SelectedIndex = 0;
+                        UIParent.UI.Add(combo);
+
                         button = new UIButton(game);
                         button.Name = "btnProceedGame";
                         button.Enabled = false;
@@ -418,7 +416,7 @@ namespace Motorki.GameScreens
                                         GameSettings.gameSlots[i] = new MotorShortDescription(typeof(PlayerMotor), ((UIComboBox)UIParent.UI["t1m" + (i + 1) + "Name"]).SelectedItem.Text, (int)((UIComboBox)UIParent.UI["t1m" + (i + 1) + "Name"]).SelectedItem.Tag);
                                         break;
                                     case "Bot":
-                                        GameSettings.gameSlots[i] = new MotorShortDescription(typeof(BotMotor), ((UIComboBox)UIParent.UI["t1m" + (i + 1) + "Name"]).SelectedItem.Text, -1);
+                                        GameSettings.gameSlots[i] = new MotorShortDescription(typeof(BotMotor), ((UIComboBox)UIParent.UI["t1m" + (i + 1) + "Name"]).SelectedItem.Text, (int)((UIComboBox)UIParent.UI["comboBotLevel"]).SelectedItem.Tag);
                                         break;
                                 }
                                 switch (UIParent.UI["t2m" + (i + 1) + "Type"].Text)
@@ -430,7 +428,7 @@ namespace Motorki.GameScreens
                                         GameSettings.gameSlots[5 + i] = new MotorShortDescription(typeof(PlayerMotor), ((UIComboBox)UIParent.UI["t2m" + (i + 1) + "Name"]).SelectedItem.Text, (int)((UIComboBox)UIParent.UI["t2m" + (i + 1) + "Name"]).SelectedItem.Tag);
                                         break;
                                     case "Bot":
-                                        GameSettings.gameSlots[5 + i] = new MotorShortDescription(typeof(BotMotor), ((UIComboBox)UIParent.UI["t2m" + (i + 1) + "Name"]).SelectedItem.Text, -1);
+                                        GameSettings.gameSlots[5 + i] = new MotorShortDescription(typeof(BotMotor), ((UIComboBox)UIParent.UI["t2m" + (i + 1) + "Name"]).SelectedItem.Text, (int)((UIComboBox)UIParent.UI["comboBotLevel"]).SelectedItem.Tag);
                                         break;
                                 }
                             }

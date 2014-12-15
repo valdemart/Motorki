@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Motorki.UIClasses;
 using Motorki.GameClasses;
-using System;
+using Motorki.UIClasses;
 
 namespace Motorki.GameScreens
 {
@@ -120,67 +120,13 @@ namespace Motorki.GameScreens
 
                         label = new UILabel(game);
                         label.AutoSize = true;
-                        label.Text = "Player: ";
+                        label.Text = "Player name: ";
                         label.PositionAndSize = new Rectangle(10, 95 + 5, 0, 0);
-                        UIParent.UI.Add(label);
-
-                        combo = new UIComboBox(game);
-                        combo.Name = "cboxPlayerID";
-                        combo.Edible = false;
-                        combo.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, label.PositionAndSize.Top - 5, 100, 0);
-                        combo.Values.Add(new UITaggedValue("player 1", 1));
-                        combo.Values.Add(new UITaggedValue("player 2", 2));
-                        combo.SelectedIndex = -1;
-                        combo.SelectionChanged += (UIComboBox_SelectionChanged)((cbox, oldsel) => {
-                            switch(cbox.SelectedIndex)
-                            {
-                                case 0:
-                                    UIParent.UI["tboxName"].Text = GameSettings.player1Name;
-                                    for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Length; i++)
-                                        ((UIKeyPicker)UIParent.UI["kp" + Enum.GetNames(typeof(GameKeyNames))[i]]).SelectedKey = GameSettings.player1Keys[i];
-                                    for (int i = 0; i < ((UIComboBox)UIParent.UI["cboxColor"]).Values.Count; i++)
-                                        if ((Color)((UIComboBox)UIParent.UI["cboxColor"]).Values[i].Tag == GameSettings.player1Color)
-                                        {
-                                            ((UIComboBox)UIParent.UI["cboxColor"]).SelectedIndex = i;
-                                            break;
-                                        }
-                                    for (int i = 0; i < ((UIComboBox)UIParent.UI["cboxSteering"]).Values.Count; i++)
-                                        if ((PlayerMotor.Steering)((UIComboBox)UIParent.UI["cboxSteering"]).Values[i].Tag == GameSettings.player1Steering)
-                                        {
-                                            ((UIComboBox)UIParent.UI["cboxSteering"]).SelectedIndex = i;
-                                            break;
-                                        }
-                                    break;
-                                case 1:
-                                    UIParent.UI["tboxName"].Text = GameSettings.player2Name;
-                                    for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Length; i++)
-                                        ((UIKeyPicker)UIParent.UI["kp" + Enum.GetNames(typeof(GameKeyNames))[i]]).SelectedKey = GameSettings.player2Keys[i];
-                                    for (int i = 0; i < ((UIComboBox)UIParent.UI["cboxColor"]).Values.Count; i++)
-                                        if ((Color)((UIComboBox)UIParent.UI["cboxColor"]).Values[i].Tag == GameSettings.player2Color)
-                                        {
-                                            ((UIComboBox)UIParent.UI["cboxColor"]).SelectedIndex = i;
-                                            break;
-                                        }
-                                    for (int i = 0; i < ((UIComboBox)UIParent.UI["cboxSteering"]).Values.Count; i++)
-                                        if ((PlayerMotor.Steering)((UIComboBox)UIParent.UI["cboxSteering"]).Values[i].Tag == GameSettings.player2Steering)
-                                        {
-                                            ((UIComboBox)UIParent.UI["cboxSteering"]).SelectedIndex = i;
-                                            break;
-                                        }
-                                    break;
-                            }
-                        });
-                        UIParent.UI.Add(combo);
-
-                        label = new UILabel(game);
-                        label.AutoSize = true;
-                        label.Text = "Name: ";
-                        label.PositionAndSize = new Rectangle(10, combo.PositionAndSize.Bottom + 10, 0, 0);
                         UIParent.UI.Add(label);
 
                         textbox = new UITextBox(game);
                         textbox.Name = "tboxName";
-                        textbox.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, combo.PositionAndSize.Bottom + 5, 200, 0);
+                        textbox.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, label.PositionAndSize.Top - 5, 200, 0);
                         textbox.TextLenghtLimit = 15;
                         textbox.Text = "";
                         UIParent.UI.Add(textbox);
@@ -337,8 +283,22 @@ namespace Motorki.GameScreens
                         combo.SelectedIndex = 0;
                         UIParent.UI.Add(combo);
 
-                        //load player 1 data
-                        ((UIComboBox)UIParent.UI["cboxPlayerID"]).SelectedIndex = 0;
+                        //load player data
+                        UIParent.UI["tboxName"].Text = GameSettings.playerName;
+                        for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Length; i++)
+                            ((UIKeyPicker)UIParent.UI["kp" + Enum.GetNames(typeof(GameKeyNames))[i]]).SelectedKey = GameSettings.playerKeys[i];
+                        for (int i = 0; i < ((UIComboBox)UIParent.UI["cboxColor"]).Values.Count; i++)
+                            if ((Color)((UIComboBox)UIParent.UI["cboxColor"]).Values[i].Tag == GameSettings.playerColor)
+                            {
+                                ((UIComboBox)UIParent.UI["cboxColor"]).SelectedIndex = i;
+                                break;
+                            }
+                        for (int i = 0; i < ((UIComboBox)UIParent.UI["cboxSteering"]).Values.Count; i++)
+                            if ((PlayerMotor.Steering)((UIComboBox)UIParent.UI["cboxSteering"]).Values[i].Tag == GameSettings.playerSteering)
+                            {
+                                ((UIComboBox)UIParent.UI["cboxSteering"]).SelectedIndex = i;
+                                break;
+                            }
 
                         button = new UIButton(game);
                         button.Name = "btnAcceptPlayerChanges";
@@ -347,25 +307,13 @@ namespace Motorki.GameScreens
                         button.Action += (UIButton_Action)((btn) =>
                         {
                             //save changes
-                            switch (((UIComboBox)UIParent.UI["cboxPlayerID"]).SelectedIndex)
-                            {
-                                case 0:
-                                    GameSettings.player1Name = UIParent.UI["tboxName"].Text;
-                                    for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Length; i++)
-                                        GameSettings.player1Keys[i] = ((UIKeyPicker)UIParent.UI["kp" + Enum.GetNames(typeof(GameKeyNames))[i]]).SelectedKey;
-                                    GameSettings.player1Color = (Color)((UIComboBox)UIParent.UI["cboxColor"]).SelectedItem.Tag;
-                                    GameSettings.player1Steering = (PlayerMotor.Steering)((UIComboBox)UIParent.UI["cboxSteering"]).SelectedItem.Tag;
-                                    break;
-                                case 1:
-                                    GameSettings.player2Name = UIParent.UI["tboxName"].Text;
-                                    for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Length; i++)
-                                        GameSettings.player2Keys[i] = ((UIKeyPicker)UIParent.UI["kp" + Enum.GetNames(typeof(GameKeyNames))[i]]).SelectedKey;
-                                    GameSettings.player2Color = (Color)((UIComboBox)UIParent.UI["cboxColor"]).SelectedItem.Tag;
-                                    GameSettings.player2Steering = (PlayerMotor.Steering)((UIComboBox)UIParent.UI["cboxSteering"]).SelectedItem.Tag;
-                                    break;
-                            }
+                            GameSettings.playerName = UIParent.UI["tboxName"].Text;
+                            for (int i = 0; i < Enum.GetNames(typeof(GameKeyNames)).Length; i++)
+                                GameSettings.playerKeys[i] = ((UIKeyPicker)UIParent.UI["kp" + Enum.GetNames(typeof(GameKeyNames))[i]]).SelectedKey;
+                            GameSettings.playerColor = (Color)((UIComboBox)UIParent.UI["cboxColor"]).SelectedItem.Tag;
+                            GameSettings.playerSteering = (PlayerMotor.Steering)((UIComboBox)UIParent.UI["cboxSteering"]).SelectedItem.Tag;
 
-                            //don't exit - user might want to changed another player too
+                            //don't exit - user might want to change something more
                         });
                         UIParent.UI.Add(button);
 
@@ -431,24 +379,6 @@ namespace Motorki.GameScreens
                         });
                         UIParent.UI.Add(checkbox);
 
-                        label = new UILabel(game);
-                        label.Name = "label2";
-                        label.Text = "Screen split mode: ";
-                        label.AutoSize = true;
-                        label.PositionAndSize = new Rectangle(checkbox.PositionAndSize.Left, checkbox.PositionAndSize.Bottom + 5, 0, 0);
-                        UIParent.UI.Add(label);
-
-                        combo = new UIComboBox(game);
-                        combo.Name = "comboSplitMode";
-                        combo.Edible = false;
-                        combo.MaxDisplayedItems = 2;
-                        combo.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, label.PositionAndSize.Top, 200, 0);
-                        combo.PositionAndSize = new Rectangle(label.PositionAndSize.Right + 5, label.PositionAndSize.Top + (label.PositionAndSize.Height / 2 - combo.PositionAndSize.Height / 2), 200, 0);
-                        combo.Values.Add("horizontal");
-                        combo.Values.Add("vertical");
-                        combo.SelectedIndex = GameSettings.videoSplitScreenMode;
-                        UIParent.UI.Add(combo);
-
                         button = new UIButton(game);
                         button.Name = "btnAcceptVideoChanges";
                         button.Text = "Save";
@@ -458,7 +388,6 @@ namespace Motorki.GameScreens
                             //save changes
                             GameSettings.videoGraphMode = ((UIComboBox)UIParent.UI["comboDisplayMode"]).SelectedIndex;
                             GameSettings.videoFullscreen = ((UICheckBox)UIParent.UI["cboxFullscreen"]).Checked;
-                            GameSettings.videoSplitScreenMode = ((UIComboBox)UIParent.UI["comboSplitMode"]).SelectedIndex;
 
                             UIParent.ClearESCHook();
                             oResult = new GameScreen_Options(game, -1);

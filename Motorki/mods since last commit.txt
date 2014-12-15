@@ -4,8 +4,24 @@ legend:
 * - in progress
 # - ready for tests
 ? - possibly to do
+! - important note
+. - just note
 
-<no changes made>
+- game
+	- local two player game options removed from project
+	- splitscreen options removed from project
+	- all game types unlocked
+	- default game limits in new game
+	- corrects in winning/losing functions - now should work perfectly for won/tied/lost results
+- bots
+	- bot sophistication controls in new game screen
+	- GamePlay almost connected (GamePlay->agents notifications left to be created)
+	- BotMotor learned to start agent
+- maps
+	- test what will happen if many motors spawn at the same place&time
+		- motors crashed each other and sometimes some bugs happened
+		- categorized as bug and fixed
+		- motors still will destroy each other if they are enemies
 
 todo:
 + connecting
@@ -13,7 +29,6 @@ todo:
 + maps
 	+ notify map loading progress to loading screen
 	+ drawing to split screen part (to be done when GamePlayScreen will be available)
-	# test what will happen if many motors spawn at the same place&time
 	+ more maps
 + minimap
 + textures
@@ -48,12 +63,12 @@ todo:
 <engineer>
 + bots
 	+ bot sophistication normal/hard
-	+ bot sophistication controls in new game screen
+		* todo: implement agent actions
 	+ connect in GamePlay game initialization routines (need additional GameSettings field)
-	+ in higher sophistication MindProc routines need to delegate GameTime information to the BotAgent routines
-		? isn't it just much worthy to throw easy mode also on the agent system?
-	+ (different point of view) BotSystem class as part of GamePlay (higher level than BotMotor)
-		! allows to start system separately from starting/registering agents
+		* todo: GamePlay tells to all agents that game started or finished
+	. in higher sophistication MindProc routines don't need to delegate GameTime information to the BotAgent routines
+		. agents can get time from MotorkiGame.game.currentTime
+		! agent should copy current time if it needs to use it more that once - Update can occur while agent is thinking about its own decisions
 	! need some agent description format
 	! need some tactics for bots (defensive, offensive, cooperatively offensive)
 		! need some communication for bots to use during cooperatives

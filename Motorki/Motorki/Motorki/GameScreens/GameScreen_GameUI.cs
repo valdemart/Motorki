@@ -1,9 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Motorki.GameClasses;
 using Motorki.UIClasses;
 
@@ -92,7 +89,7 @@ namespace Motorki.GameScreens
 
             UIParent.UI.LoadAndInitialize();
             game.mCursor.Visible = false;
-            GameSettings.gamePlayScreen1.gameFinished = UIParent_ESCHook;
+            GameSettings.gamePlayScreen.gameFinished = UIParent_ESCHook;
         }
 
         void FragsPoints_Changed(Motorek m, int old_value)
@@ -136,7 +133,7 @@ namespace Motorki.GameScreens
                         enemyTeamMembersCount++;
                 }
             }
-            int time_left = (int)(GameSettings.gameTimeLimit * 60 - (GameSettings.gamePlayScreen1.currentTime - GameSettings.gamePlayScreen1.startTime));
+            int time_left = (int)(GameSettings.gameTimeLimit * 60 - (GameSettings.gamePlayScreen.currentTime - GameSettings.gamePlayScreen.startTime));
 
             //some statistics
             int leader_frags = GameSettings.gameMotors[motorID].FragsCount - GameSettings.gameMotors.Max((_) => _ != null && _ != GameSettings.gameMotors[motorID] ? _.FragsCount : 0);
@@ -164,7 +161,7 @@ namespace Motorki.GameScreens
             UIParent.ClearESCHook();
             game.mCursor.Visible = true;
             GameSettings.gameMotors[motorID].HPChanged = null;
-            GameSettings.gamePlayScreen1.Destroy();
+            GameSettings.gamePlayScreen.Destroy();
 
             oResult = null;
             iResult = MenuReturnCodes.MenuStartRequested;
