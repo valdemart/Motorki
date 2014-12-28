@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace Motorki.GameClasses
 {
@@ -36,7 +37,11 @@ namespace Motorki.GameClasses
             {
                 if (GameSettings.agentController != null)
                 {
-                    GameSettings.agentController.RegisterAgent(new Agent(GameSettings.agentController, "bot" + name));
+                    int motorID;
+                    for (motorID = 0; motorID < GameSettings.gameMotors.Length; motorID++)
+                        if (GameSettings.gameMotors[motorID] == this)
+                            break;
+                    GameSettings.agentController.RegisterAgent(new BotAgent(GameSettings.agentController, "bot" + name, motorID));
                 }
             }
         }

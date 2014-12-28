@@ -15,8 +15,9 @@ legend:
 	- corrects in winning/losing functions - now should work perfectly for won/tied/lost results
 - bots
 	- bot sophistication controls in new game screen
-	- GamePlay almost connected (GamePlay->agents notifications left to be created)
+	- GamePlay almost connected (GameStart/Stop notifications left)
 	- BotMotor learned to start agent
+	- wall avoiding and fooling around algorithms done
 - maps
 	- test what will happen if many motors spawn at the same place&time
 		- motors crashed each other and sometimes some bugs happened

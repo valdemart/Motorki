@@ -157,6 +157,11 @@ namespace Motorki.GameClasses
         public void Destroy()
         {
             gameStarted = false;
+            if (GameSettings.agentController != null)
+            {
+                GameSettings.agentController.KillAgentController();
+                GameSettings.agentController = null;
+            }
             for (int i = 0; i < GameSettings.gameMotors.Length; i++)
                 if (GameSettings.gameMotors[i] != null)
                 {
@@ -376,9 +381,13 @@ namespace Motorki.GameClasses
             if (gameStarted)
             {
                 //update motors
+                if (GameSettings.agentController != null)
+                    GameSettings.agentController.SendToAllAgents(new BotAgentMessage(null, null, BotAgentMessages.PauseForControlApplying, ""));
                 for (int i = 0; i < GameSettings.gameMotors.Length; i++)
                     if (GameSettings.gameMotors[i] != null)
                         GameSettings.gameMotors[i].Update(gameTime);
+                if (GameSettings.agentController != null)
+                    GameSettings.agentController.SendToAllAgents(new BotAgentMessage(null, null, BotAgentMessages.ControlsApplied, ""));
 
                 //do some game type research
                 bool team_game = (GameSettings.gameType == GameType.TeamDeathMatch) || (GameSettings.gameType == GameType.TeamDemolition) || (GameSettings.gameType == GameType.TeamPointMatch) || (GameSettings.gameType == GameType.TeamTimeMatch);

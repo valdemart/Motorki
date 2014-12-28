@@ -19,7 +19,12 @@ namespace Motorki.GameClasses
         protected SpriteBatch sb;
 
         //physics
+        public float width { get; set; }
+        public float height { get; set; }
         public Vector2 position { get; set; }
+        /// <summary>
+        /// given in degrees
+        /// </summary>
         public float rotation { get; set; }
         protected Rectangle framingRect { get; private set; }
         public List<string> newCollided { get; set; }
@@ -155,6 +160,8 @@ namespace Motorki.GameClasses
             trace.LoadAndInitialize();
             motorRenderTarget = new RenderTarget2D(game.GraphicsDevice, BackTexture[0].Width, BackTexture[0].Height);
 
+            width = BackTexture[0].Width / 2;
+            height = BackTexture[0].Height;
             this.framingRect = framingRect;
         }
 
@@ -182,10 +189,10 @@ namespace Motorki.GameClasses
 
             //do some coord corrections (map bounds)
             Vector2[] v = new Vector2[4];
-            v[0] = new Vector2(-BackTexture[0].Width / 4, -BackTexture[0].Height / 2);
-            v[1] = new Vector2(+BackTexture[0].Width / 4, -BackTexture[0].Height / 2);
-            v[2] = new Vector2(+BackTexture[0].Width / 4, +BackTexture[0].Height / 2);
-            v[3] = new Vector2(-BackTexture[0].Width / 4, +BackTexture[0].Height / 2);
+            v[0] = new Vector2(-width / 2, -height / 2);
+            v[1] = new Vector2(+width / 2, -height / 2);
+            v[2] = new Vector2(+width / 2, +height / 2);
+            v[3] = new Vector2(-width / 2, +height / 2);
 
             Vector2[] v_prim = new Vector2[4];
             Matrix mat = Matrix.CreateRotationZ(rotation.ToRadians());

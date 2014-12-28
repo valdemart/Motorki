@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 
 namespace Motorki.GameClasses
 {
@@ -12,12 +13,17 @@ namespace Motorki.GameClasses
         /// </summary>
         public bool selfDeregister { get; protected set; }
 
+        protected bool processingMessages { get; set; }
+        protected bool receivingMessage { get; set; }
+
         public Agent(AgentController ac, string name)
         {
             agentController = ac;
             Name = name;
             messageList = new List<AgentMessage>();
             selfDeregister = false;
+            processingMessages = false;
+            receivingMessage = false;
         }
 
         /// <summary>
@@ -38,19 +44,26 @@ namespace Motorki.GameClasses
             a.ReceiveMessage(msg);
         }
 
-        /// <summary>
-        /// used to receive messages from other agents
-        /// </summary>
-        public AgentMessage ReceiveMessage()
+        protected void BlockMessageReceivingStart()
         {
-            if(messageList.Count>0)
-            {
-                AgentMessage msg = messageList[0];
-                messageList.RemoveAt(0);
-                return msg;
-            }
-            else
-                return null;
+            while (processingMessages) Thread.Sleep(10);
+            receivingMessage = true;
+        }
+
+        protected void BlockMessageReceivingEnd()
+        {
+            receivingMessage = false;
+        }
+
+        protected void BlockMessageProcessingStart()
+        {
+            while (receivingMessage) Thread.Sleep(10);
+            processingMessages = true;
+        }
+
+        protected void BlockMessageProcessingEnd()
+        {
+            processingMessages = false;
         }
 
         /// <summary>
@@ -58,7 +71,11 @@ namespace Motorki.GameClasses
         /// </summary>
         protected virtual void ReceiveMessage(AgentMessage msg)
         {
+            BlockMessageReceivingStart();
+
             messageList.Add(msg);
+
+            BlockMessageReceivingEnd();
         }
 
         /// <summary>

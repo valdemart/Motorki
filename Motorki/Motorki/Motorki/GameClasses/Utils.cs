@@ -1,9 +1,25 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Motorki.GameClasses
 {
     public static class Utils
     {
+        public static Vector2 Perpendicular(this Vector2 vec)
+        {
+            return new Vector2(-vec.Y, vec.X);
+        }
+
+        public static float Dot(this Vector2 vec, Vector2 vector)
+        {
+            return vec.X * vector.X + vec.Y * vector.Y;
+        }
+
+        public static Vector2 Normalized(this Vector2 vec)
+        {
+            return new Vector2(vec.X / vec.Length(), vec.Y / vec.Length());
+        }
+
         /// <summary>
         /// calculates coordinates of an image of a point on a line
         /// </summary>
@@ -29,6 +45,35 @@ namespace Motorki.GameClasses
             float x = (-Ck * direction.X - Cl * lineNormal.Y) / Vector2.Dot(lineNormal, direction);
             float y = (-Ck * direction.Y + Cl * lineNormal.X) / Vector2.Dot(lineNormal, direction);
             return (point - (new Vector2(x, y))).Length();
+        }
+
+        /// <summary>
+        /// calculates a distance between a line and a point
+        /// </summary>
+        public static float DistanceFromLine(Vector2 linePoint, Vector2 lineNormal, Vector2 point)
+        {
+            return (point - Cast(linePoint, lineNormal, point)).Length();
+        }
+
+        /// <summary>
+        /// calculates a distance between a line segment and a point. If point image is not placed on the line segment, a distance to a closer end of a segment is returned
+        /// </summary>
+        public static float DistanceFromLineSegment(Vector2 segmentEnd1, Vector2 segmentEnd2, Vector2 lineNormal, Vector2 point)
+        {
+            Vector2 segmentCenter = (segmentEnd1 + segmentEnd2) / 2;
+
+            float distCenterLimit = (segmentCenter - segmentEnd1).Length();
+            float distCenter = (segmentCenter - Cast(segmentEnd1, lineNormal, point)).Length();
+
+            float distEnd1 = (segmentEnd1 - point).Length();
+            float distEnd2 = (segmentEnd2 - point).Length();
+
+            float distSegment = DistanceFromLine(segmentEnd1, lineNormal, point);
+
+            if (distCenter > distCenterLimit)
+                return Math.Min(distEnd1, distEnd2);
+            else
+                return distSegment;
         }
 
         public static bool TestLineAndPointCollision(Vector2[] linePoints, Vector2 lineNormal, Vector2 point, Vector2 pointDirection, out Vector2 pointReverseDisplacement)
@@ -82,6 +127,14 @@ namespace Motorki.GameClasses
         public static float ToDegrees(this float radians)
         {
             return radians * Rad2Deg;
+        }
+
+        /// <summary>
+        /// returns -1 if float is &lt;0, 1 if float is &gt;0, 0 if float is ==0
+        /// </summary>
+        public static int Sign(this float f)
+        {
+            return (f > 0 ? 1 : (f < 0 ? -1 : 0));
         }
     }
 }

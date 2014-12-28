@@ -90,7 +90,7 @@ namespace Motorki.GameClasses
     {
         #region map data classes
 
-        private class MapPoint
+        public class MapPoint
         {
             public Vector2 Coords { get; private set; }
             public string Name { get; private set; }
@@ -102,7 +102,7 @@ namespace Motorki.GameClasses
             }
         }
 
-        private class MapEdge
+        public class MapEdge
         {
             public Vector2 start;
             public Vector2 end;
@@ -141,7 +141,7 @@ namespace Motorki.GameClasses
             }
         }
 
-        private class MapSpawnPoint : MapPoint
+        public class MapSpawnPoint : MapPoint
         {
             /// <summary>
             /// in degrees
@@ -160,7 +160,7 @@ namespace Motorki.GameClasses
         /// <summary>
         /// circular map sector for optimizing collision detection
         /// </summary>
-        private class MapSector
+        public class MapSector
         {
             public string Name { get; private set; }
             public Vector2 Position { get; private set; }
@@ -239,11 +239,11 @@ namespace Motorki.GameClasses
         private MotorkiGame game;
 
         public MapParameters Parameters { get; private set; }
-        private List<MapPoint> Points;
-        private List<MapEdge> Edges;
-        private List<MapSpawnPoint> SpawnPoints;
+        public List<MapPoint> Points;
+        public List<MapEdge> Edges;
+        public List<MapSpawnPoint> SpawnPoints;
         private List<bool> SpawnInUse;
-        private List<MapSector> Sectors;
+        public List<MapSector> Sectors;
         private List<MapRect> Rects;
         private MapSlice[,] Slices;
 
