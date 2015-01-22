@@ -74,6 +74,7 @@ namespace Motorki.GameClasses
                 Thread.Sleep(20);
             }
             acInternalRequest = ACRequests.Dummy;
+            acThread = null;
             Thread.CurrentThread.Abort();
         }
 

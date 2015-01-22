@@ -7,22 +7,9 @@ legend:
 ! - important note
 . - just note
 
-- game
-	- local two player game options removed from project
-	- splitscreen options removed from project
-	- all game types unlocked
-	- default game limits in new game
-	- corrects in winning/losing functions - now should work perfectly for won/tied/lost results
 - bots
-	- bot sophistication controls in new game screen
-	- GamePlay almost connected (GameStart/Stop notifications left)
-	- BotMotor learned to start agent
-	- wall avoiding and fooling around algorithms done
-- maps
-	- test what will happen if many motors spawn at the same place&time
-		- motors crashed each other and sometimes some bugs happened
-		- categorized as bug and fixed
-		- motors still will destroy each other if they are enemies
+	- bugfix: exception on starting second game now fixed
+	- agent processing highly improved
 
 todo:
 + connecting
@@ -43,9 +30,7 @@ todo:
 	+ partially need: networking (for JoinGame support - NewGame can work in offline if it needs)
 	? need: anchors in UIControl
 	+ New game - push to Loading screen
-	+ game play init: split screen and two player support
 + game
-	+ unlock team game modes
 	* GamePlay class (game progress processor; also network client)
 	+ bonus storage (map contains bonus accessibility for game; server generates bonusses)
 	* collision detection
@@ -53,26 +38,12 @@ todo:
 	* UI
 		+ frag/point counters
 			+ team notifications
-			# demolition notifications (counter should show how many of all motors is still alive)
-		+ party members
-		+ split screen
-	# game types (implementation)
-	+ check team spawn obtaining method
+		# party members
 ? UI: move state shifting to switch-case scheme (instead of ?: scheme) - state machines for documentation
 ? UI: lock unused properties accessibility
 ? UI: anchors
-<engineer>
-+ bots
-	+ bot sophistication normal/hard
-		* todo: implement agent actions
-	+ connect in GamePlay game initialization routines (need additional GameSettings field)
-		* todo: GamePlay tells to all agents that game started or finished
-	. in higher sophistication MindProc routines don't need to delegate GameTime information to the BotAgent routines
-		. agents can get time from MotorkiGame.game.currentTime
-		! agent should copy current time if it needs to use it more that once - Update can occur while agent is thinking about its own decisions
-	! need some agent description format
-	! need some tactics for bots (defensive, offensive, cooperatively offensive)
-		! need some communication for bots to use during cooperatives
+? code
+	+ add some Visual Studio rectriction attributes to make code cleaner to write
 + UIClasses
 	+ event cancellation through event.GetInvokationList()
 + poczytac: SESAM (materia³y wprowadzajace od tego i zajrzec w kod)

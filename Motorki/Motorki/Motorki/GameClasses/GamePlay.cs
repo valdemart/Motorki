@@ -132,6 +132,11 @@ namespace Motorki.GameClasses
                     GameSettings.gameMotors[i] = null;
             if (need_agentcontroller)
             {
+                if (GameSettings.agentController != null)
+                {
+                    GameSettings.agentController.KillAgentController();
+                    GameSettings.agentController = null;
+                }
                 GameSettings.agentController = new AgentController();
             }
 
@@ -578,6 +583,12 @@ namespace Motorki.GameClasses
                         gameStarted = false;
                         if (gameFinished != null)
                             gameFinished();
+                    }
+
+                    if (GameSettings.agentController != null)
+                    {
+                        GameSettings.agentController.KillAgentController();
+                        GameSettings.agentController = null;
                     }
                 }
             }

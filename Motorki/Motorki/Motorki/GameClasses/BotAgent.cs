@@ -21,13 +21,17 @@ namespace Motorki.GameClasses
         Hashtable friendlyAgents;
 
         //internal state variables
-        public BotAgentProcessingStates state { get; private set; }
         /// <summary>
         /// id on enemies list of a target ("primary objective: kill enemies[target]")
         /// </summary>
         int target;
+        float lastTargetHP;
         bool steeringLocked;
         FoolAroundData faData;
+        /// <summary>
+        /// penalty time when couldn't avade trace spot. during penalty time steering changes are forbidden
+        /// </summary>
+        int avaisionPenalty;
 
         /// <summary>
         /// warning: motor should be created before creating an agent. if not, use AttachBike to assign motor correctly
@@ -42,7 +46,10 @@ namespace Motorki.GameClasses
             friendlyAgents = new Hashtable();
             steeringLocked = false;
 
+            target = -1;
+            lastTargetHP = 0;
             faData = new FoolAroundData();
+            avaisionPenalty = 0;
         }
 
         public void AttachBike(int motorID)
@@ -76,6 +83,11 @@ namespace Motorki.GameClasses
             BlockMessageReceivingEnd();
         }
 
+        public override bool SearchTest(object searchData)
+        {
+            return (motorID == (int)searchData);
+        }
+
         private class MotorDataContext
         {
             public int ctrlDirection;
@@ -96,7 +108,7 @@ namespace Motorki.GameClasses
 
         public override void Process()
         {
-            if(ownMotor==null) return;
+            if (ownMotor == null) return;
             if (ownMotor.sophistication == BotMotor.BotSophistication.Easy) return;
 
             //!!!to get last Update time check MotorkiGame.game.currentTime
@@ -128,17 +140,54 @@ namespace Motorki.GameClasses
                 }
             }
             BlockMessageProcessingEnd();
-            
+
             //redetect enemies and friends
+            bool isTeamGame = ((GameSettings.gameType == GameType.TeamDeathMatch) || (GameSettings.gameType == GameType.TeamDemolition) || (GameSettings.gameType == GameType.TeamPointMatch) || (GameSettings.gameType == GameType.TeamTimeMatch));
+            int teamID = motorID / 5;
+            teammates.Clear();
+            enemies.Clear();
+            friendlyAgents.Clear();
+            for (int i = 0; i < GameSettings.gameMotors.Length; i++)
+                if ((motorID != i) && (GameSettings.gameMotors[i] != null))
+                    if (isTeamGame && (teamID == i / 5))
+                    {
+                        teammates.Add(i, GameSettings.gameMotors[i]);
+                        //if it's a bot with more than easy sophistication then look for its agent
+                        if ((GameSettings.gameMotors[i] as BotMotor) == null ? false : (GameSettings.gameMotors[i] as BotMotor).sophistication != BotMotor.BotSophistication.Easy)
+                            friendlyAgents.Add(i, agentController.FindSpecificAgent(i));
+                    }
+                    else
+                    {
+                        enemies.Add(i, GameSettings.gameMotors[i]);
+                    }
 
             //do current action
             //1st priority - own safety (traces)
-            if (false)
+            int traceSpotImportance;
+            if ((traceSpotImportance = CheckTraceCollisions(ref mdc)) == 2)
             {
-                //logic note: percentage for avoiding obstacle
-                //logic note: if happend to not avoid then penalty time which forces no changes in direction and braking
-                //logic note: force avoiding traces over avoiding walls (when forced to hit wall or trace choose wall)
-                return; //lock lower priority processing
+                //percentage for avoiding obstacle. 25% chance for not avoiding
+                avaisionPenalty = Math.Max(0, avaisionPenalty - MotorkiGame.game.currentTime.ElapsedGameTime.Milliseconds);
+                if ((avaisionPenalty == 0) && (ownMotor.sophistication != BotMotor.BotSophistication.Hard))
+                {
+                    if (MotorkiGame.random.Next(100) / 25 == 0)
+                    {
+                        traceSpotImportance = 0;
+                        avaisionPenalty = 200;
+                    }
+                    else
+                    {
+                        //force avoiding traces over avoiding walls (when forced to hit wall or trace choose wall)
+                        ApplySteering(mdc.newSteering);
+                        return; //lock lower priority processing
+                    }
+                }
+                else
+                {
+                    //force avoiding traces over avoiding walls (when forced to hit wall or trace choose wall)
+                    ApplySteering(mdc.newSteering);
+                    return; //lock lower priority processing
+                }
             }
 
             //2nd priority - own safety (walls)
@@ -151,24 +200,17 @@ namespace Motorki.GameClasses
             }
             obstacleSteering = mdc.newSteering;
 
-            if (ownMotor.sophistication == BotMotor.BotSophistication.Hard)
+            if ((ownMotor.sophistication == BotMotor.BotSophistication.Hard) || (obstacleImportance == 0)) //deffence is more important than attack only on normal mode
             {
                 //3rd priority - select target
-                if (false)
-                {
-                    //logic note: when to change target/select it again: monitor targets HP. when new value is greater than old value then HP has been reset - target died and has been respawned
-                    return; //lock lower priority processing
-                }
+                target = SelectTarget(ref mdc);
 
                 //4th priority - get closer to the target
-                if (false)
+                if (target != -1)
                 {
-                    return; //lock lower priority processing
-                }
-
-                //5th priority - consult strategy
-                if (false)
-                {
+                    lastTargetHP = GameSettings.gameMotors[target].HP;
+                    CalculateAttackSteering(ref mdc);
+                    ApplySteering(mdc.newSteering);
                     return; //lock lower priority processing
                 }
             }
@@ -196,6 +238,107 @@ namespace Motorki.GameClasses
                 case -2: ownMotor.ctrlDirection = -1; ownMotor.ctrlBrakes = true; break;
                 case 2: ownMotor.ctrlDirection = 1; ownMotor.ctrlBrakes = true; break;
             }
+        }
+
+        /// <summary>
+        /// determines whether there's a need to avoid trace spots. returns 0 when tests didn't detect any danger, 1 when danger is acceptable, 2 when danger is not acceptable
+        /// </summary>
+        private int CheckTraceCollisions(ref MotorDataContext mdc)
+        {
+            float range = mdc.turningRange + mdc.width / 2;
+            float rangeBrakes = mdc.turningRangeBrakes + mdc.width / 2;
+            float safetyCoef = 3.0f; //safety margin for turns (multiplier for turn ranges, should be safetyCoef < 1.0f). greater value means turning further to the edge
+
+            //sequence: normal speed turn left, normal speed turn right, brakes turn left, brakes turn right
+            Vector2[] turnCenters = new Vector2[] { mdc.position - mdc.turningRange * mdc.dirVecPerp, mdc.position + mdc.turningRange * mdc.dirVecPerp,
+                                                    mdc.position - mdc.turningRangeBrakes * mdc.dirVecPerp, mdc.position + mdc.turningRangeBrakes * mdc.dirVecPerp };
+            //sequence: normal speed range, brakes range
+            float[] turnRanges = new float[] { (mdc.turningRange + mdc.width / 2) * safetyCoef, (mdc.turningRangeBrakes + mdc.width / 2) * safetyCoef };
+
+            float mtsRange = ((MotorTrace.SpotTexture.Width + MotorTrace.SpotTexture.Height) / 2 + (ownMotor.BackTexture[0].Width + ownMotor.BackTexture[0].Height) / 2) / 2;
+
+            float margin = float.PositiveInfinity;
+            int result = 0;
+            foreach (Motorek em in enemies.Values)
+            {
+                for (int mtsID = 0; mtsID < em.trace.Count; mtsID++)
+                {
+                    MotorTraceSpot mts = em.trace[mtsID];
+                    Vector2 mtsDirection = mts.position - mdc.position; //unnormalized vector pointing from motor position to trace spot position
+
+                    //check is this spot any threat at all
+                    if (mtsDirection.Normalized().Dot(mdc.dirVec) <= 0.0f) continue; //direction test
+                    if ((mtsRange + mdc.width / 2) / mtsDirection.Length() > Math.Abs(mtsDirection.Normalized().Dot(mdc.dirVecPerp))) continue; //angular test
+
+                    //check distance for avoiding a spot
+                    int turnSign = -mdc.dirVec.Dot(mtsDirection).Sign();
+                    if (turnSign <= 0) //test left turns
+                    {
+                        float dist;
+
+                        //no brakes
+                        dist = (mts.position - turnCenters[0]).Length() - mtsRange;
+                        if ((dist < turnRanges[0]) && (margin > dist))
+                        {
+                            margin = dist;
+                            mdc.newSteering = -1;
+                            result = 1;
+                            if ((mdc.ctrlDirection == mdc.newSteering) && !mdc.ctrlBrakes)
+                            {
+                                //amplify current steering
+                                margin *= 0.5f;
+                            }
+                        }
+
+                        //brakes
+                        dist = (mts.position - turnCenters[2]).Length() - mtsRange;
+                        if ((dist < turnRanges[1]) && (margin > dist))
+                        {
+                            margin = dist;
+                            mdc.newSteering = -2;
+                            result = 2;
+                            if ((mdc.ctrlDirection == mdc.newSteering / 2) && mdc.ctrlBrakes)
+                            {
+                                //amplify current steering
+                                margin *= 0.5f;
+                            }
+                        }
+                    }
+                    if (turnSign >= 0) //test right turns
+                    {
+                        float dist;
+
+                        //no brakes
+                        dist = (mts.position - turnCenters[1]).Length() - mtsRange;
+                        if ((dist < turnRanges[0]) && (margin > dist))
+                        {
+                            margin = dist;
+                            mdc.newSteering = 1;
+                            result = 1;
+                            if ((mdc.ctrlDirection == mdc.newSteering) && !mdc.ctrlBrakes)
+                            {
+                                //amplify current steering
+                                margin *= 0.5f;
+                            }
+                        }
+
+                        //brakes
+                        dist = (mts.position - turnCenters[3]).Length() - mtsRange;
+                        if ((dist < turnRanges[1]) && (margin > dist))
+                        {
+                            margin = dist;
+                            mdc.newSteering = 2;
+                            result = 2;
+                            if ((mdc.ctrlDirection == mdc.newSteering / 2) && mdc.ctrlBrakes)
+                            {
+                                //amplify current steering
+                                margin *= 0.5f;
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -290,6 +433,66 @@ namespace Motorki.GameClasses
             return result;
         }
 
+        private int SelectTarget(ref MotorDataContext mdc)
+        {
+            int newTarget = -1;
+            //vision distance limit
+            float visDist = (ownMotor.sophistication == BotMotor.BotSophistication.Normal ? 10 * (mdc.width + mdc.height) : float.PositiveInfinity);
+
+            //calculate distances to enemies
+            float[] distances = new float[enemies.Count];
+            int i = 0;
+            foreach(Motorek em in enemies.Values)
+                distances[i++] = (em.position-mdc.position).Length();
+
+            //select new target if no target selected or current target respawned
+            if ((target == -1) || (GameSettings.gameMotors[target].HP > lastTargetHP))
+            {
+                i = 0;
+                float minDist = float.PositiveInfinity;
+                foreach (int emk in enemies.Keys)
+                {
+                    if ((distances[i] < visDist) && (distances[i] < minDist))
+                    {
+                        newTarget = emk;
+                        minDist = distances[i];
+                    }
+                    i++;
+                }
+            }
+            else
+                newTarget = target; //maintain current target
+            return newTarget;
+        }
+
+        private void CalculateAttackSteering(ref MotorDataContext mdc)
+        {
+            if(target == -1) return;
+
+            //calculate distance
+            Vector2 targetVector = GameSettings.gameMotors[target].position - mdc.position;
+            float dist = targetVector.Length() - (2 * mdc.height);
+
+            //calculate turn steering
+            if (dist < mdc.height) //move around target
+            {
+                if (Math.Abs(targetVector.Normalized().Dot(mdc.dirVec)) >= Math.Sqrt(2) / 5)
+                    if(targetVector.Normalized().Dot(mdc.dirVec)>=0) //behind target
+                        mdc.newSteering = 0;
+                    else //before of target
+                        mdc.newSteering = targetVector.Normalized().Dot(mdc.dirVecPerp).Sign();
+                else
+                    mdc.newSteering = 0;
+            }
+            else //get closer to target
+            {
+                if (targetVector.Normalized().Dot(mdc.dirVec) <= Math.Sqrt(2)/2)
+                    mdc.newSteering = targetVector.Normalized().Dot(mdc.dirVecPerp).Sign();
+                else
+                    mdc.newSteering = 0;
+            }
+        }
+
         private class FoolAroundData
         {
             public int steering;
@@ -331,35 +534,6 @@ namespace Motorki.GameClasses
         }
     }
 
-    public enum BotAgentProcessingStates
-    {
-        NoTask,
-        /// <summary>
-        /// searching for a possible targets and teammates. done once per some time
-        /// </summary>
-        DetectingEnemiesAndFriends,
-        /// <summary>
-        /// reading inbox
-        /// </summary>
-        MessageChecking,
-        /// <summary>
-        /// sending pending messages
-        /// </summary>
-        MessageSending,
-        /// <summary>
-        /// detecting map edges, trace spots, etc.
-        /// </summary>
-        ObstaclesDetectionAndProcessing,
-        /// <summary>
-        /// selecting a target
-        /// </summary>
-        EnemyTargeting,
-        /// <summary>
-        /// maintaining strategy progress
-        /// </summary>
-        StrategyRelization,
-    }
-
     public enum BotAgentMessages
     {
         /// <summary>
@@ -382,22 +556,6 @@ namespace Motorki.GameClasses
         /// notifies bot agents that they can continue processing (controls are applied)
         /// </summary>
         ControlsApplied,
-        /// <summary>
-        /// bot agent suggests a strategy to another bot agent against specified motor
-        /// </summary>
-        StrategySuggestion,
-        /// <summary>
-        /// bot agent accepts joining suggested strategy
-        /// </summary>
-        StrategyAccept,
-        /// <summary>
-        /// bot agent denies joining suggested strategy
-        /// </summary>
-        StrategyDeny,
-        /// <summary>
-        /// bot agent notifies that it must abort strategy due to own safety
-        /// </summary>
-        StrategyAbort,
     }
 
     public class BotAgentMessage : AgentMessage
