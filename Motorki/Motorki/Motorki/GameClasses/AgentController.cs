@@ -86,7 +86,7 @@ namespace Motorki.GameClasses
         public void KillAgentController()
         {
             acInternalRequest = ACRequests.KillAgentController;
-            while (acInternalRequest == ACRequests.KillAgentController) ;
+            while (acInternalRequest == ACRequests.KillAgentController) Thread.Sleep(20);
             agentRegister.Clear();
         }
 
@@ -96,9 +96,10 @@ namespace Motorki.GameClasses
         public void RegisterAgent(Agent a)
         {
             acInternalRequest = ACRequests.SynchronizeAgentList;
-            while (acInternalRequest == ACRequests.SynchronizeAgentList) ;
+            while (acInternalRequest == ACRequests.SynchronizeAgentList) Thread.Sleep(20);
             agentRegister.Add(a);
             acInternalRequest = ACRequests.SynchronizeAgentList;
+            while (acInternalRequest == ACRequests.SynchronizeAgentList) Thread.Sleep(20);
         }
 
         /// <summary>
@@ -107,9 +108,10 @@ namespace Motorki.GameClasses
         public void DeregisterAgent(Agent a)
         {
             acInternalRequest = ACRequests.SynchronizeAgentList;
-            while (acInternalRequest == ACRequests.SynchronizeAgentList) ;
+            while (acInternalRequest == ACRequests.SynchronizeAgentList) Thread.Sleep(20);
             agentRegister.Remove(a);
             acInternalRequest = ACRequests.SynchronizeAgentList;
+            while (acInternalRequest == ACRequests.SynchronizeAgentList) Thread.Sleep(20);
         }
 
         /// <summary>
@@ -118,13 +120,14 @@ namespace Motorki.GameClasses
         public void DeregisterAgents(string namePattern)
         {
             acInternalRequest = ACRequests.SynchronizeAgentList;
-            while (acInternalRequest == ACRequests.SynchronizeAgentList) ;
+            while (acInternalRequest == ACRequests.SynchronizeAgentList) Thread.Sleep(20);
             for (int i = 0; i < agentRegister.Count; )
                 if (Regex.IsMatch(agentRegister[i].Name, namePattern))
                     agentRegister.RemoveAt(i);
                 else
                     i++;
             acInternalRequest = ACRequests.SynchronizeAgentList;
+            while (acInternalRequest == ACRequests.SynchronizeAgentList) Thread.Sleep(20);
         }
 
         /// <summary>

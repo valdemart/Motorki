@@ -446,13 +446,13 @@ namespace Motorki.GameClasses
                 distances[i++] = (em.position-mdc.position).Length();
 
             //select new target if no target selected or current target respawned
-            if ((target == -1) || (GameSettings.gameMotors[target].HP > lastTargetHP))
+            if ((target == -1) || (GameSettings.gameMotors[target].HP > lastTargetHP) || (GameSettings.gameMotors[target].HP == 0))
             {
                 i = 0;
                 float minDist = float.PositiveInfinity;
                 foreach (int emk in enemies.Keys)
                 {
-                    if ((distances[i] < visDist) && (distances[i] < minDist))
+                    if ((distances[i] < visDist) && (distances[i] < minDist) && (((Motorek)enemies[emk]).HP != 0))
                     {
                         newTarget = emk;
                         minDist = distances[i];
